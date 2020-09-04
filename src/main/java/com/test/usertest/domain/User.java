@@ -40,6 +40,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(length = 50, unique = true, nullable = false)
     private String login;
 
+
+    @Column(length = 10,unique = true)
+    @NotNull
+    private int tel;
+
     @JsonIgnore
     @NotNull
     @Size(min = 60, max = 60)
@@ -130,6 +135,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public int getTel() {
+        return tel;
+    }
+
+    public void setTel(int tel) {
+        this.tel = tel;
     }
 
     public void setLastName(String lastName) {
