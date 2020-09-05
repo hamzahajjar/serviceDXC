@@ -1,3 +1,5 @@
+import { ITeam } from 'app/shared/model/team.model';
+
 export interface IUser {
   id?: any;
   login?: string;
@@ -5,6 +7,7 @@ export interface IUser {
   lastName?: string;
   email?: string;
   tel?: any;
+  team?: ITeam;
   activated?: boolean;
   langKey?: string;
   authorities?: string[];
@@ -23,6 +26,7 @@ export class User implements IUser {
     public lastName?: string,
     public email?: string,
     public tel?:any,
+    public team?: ITeam,
     public activated?: boolean,
     public langKey?: string,
     public authorities?: string[],

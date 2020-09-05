@@ -41,6 +41,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String login;
 
 
+    @ManyToOne
+    @JoinColumn(name= "idTeam")
+    private Team team;
+
+
     @Column(length = 10,unique = true)
     @NotNull
     private int tel;
@@ -145,6 +150,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.tel = tel;
     }
 
+    public Team getTeam() { return team; }
+
+    public void setTeam(Team team) { this.team = team; }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -229,14 +238,18 @@ public class User extends AbstractAuditingEntity implements Serializable {
         return 31;
     }
 
+
     // prettier-ignore
     @Override
     public String toString() {
+        String teamTemp=(team != null )? team.toString() : "";
         return "User{" +
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
+            ", tel='" + tel+ '\'' +
+            ", team='" + teamTemp + '\'' +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +

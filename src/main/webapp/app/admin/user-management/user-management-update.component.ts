@@ -4,6 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 
 import { User } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
+import { ITeam } from 'app/shared/model/team.model';
+import { TeamService } from 'app/entities/team/team.service';
+import { map } from 'rxjs/operators';
+import { HttpResponse } from '@angular/common/http';
+
+type SelectableEntity = ITeam;
 
 @Component({
   selector: 'jhi-user-mgmt-update',
@@ -13,6 +19,7 @@ export class UserManagementUpdateComponent implements OnInit {
   user!: User;
   authorities: string[] = [];
   isSaving = false;
+  teams: ITeam[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -28,13 +35,14 @@ export class UserManagementUpdateComponent implements OnInit {
     firstName: ['', [Validators.maxLength(50)]],
     lastName: ['', [Validators.maxLength(50)]],
     email: ['', [Validators.minLength(5), Validators.maxLength(254), Validators.email]],
-    tel:[],
+    tel: [],
+    team: [],
     activated: [],
     langKey: [],
     authorities: [],
   });
 
-  constructor(private userService: UserService, private route: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(private userService: UserService, protected teamService: TeamService, private route: ActivatedRoute, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.route.data.subscribe(({ user }) => {
@@ -44,11 +52,38 @@ export class UserManagementUpdateComponent implements OnInit {
           this.user.activated = true;
         }
         this.updateForm(user);
+        this.teamService
+          .query({ filter: 'user-is-null' })
+          .pipe(
+            map((res: HttpResponse<ITeam[]>) => {
+              return res.body || [];
+            })
+          )
+          .subscribe((resBody: ITeam[]) => {
+            if (!user.team || !user.team.id) {
+              this.teams = resBody;
+              console.warn(this.teams);
+            }
+            else {
+              this.teamService
+                .find(user.team.id)
+                .pipe(
+                  map((subRes: HttpResponse<ITeam>) => {
+                    return subRes.body ? [subRes.body].concat(resBody) : resBody;
+                  })
+                )
+                .subscribe((concatRes: ITeam[]) => (this.teams = concatRes));
+            }
+
+          });
+        
       }
+
+      this.userService.authorities().subscribe(authorities => {
+        this.authorities = authorities;
+      });
     });
-    this.userService.authorities().subscribe(authorities => {
-      this.authorities = authorities;
-    });
+    console.warn("route="+this.route.data);
   }
 
   previousState(): void {
@@ -70,6 +105,7 @@ export class UserManagementUpdateComponent implements OnInit {
         () => this.onSaveError()
       );
     }
+    { { this.user } };
   }
 
   private updateForm(user: User): void {
@@ -80,6 +116,7 @@ export class UserManagementUpdateComponent implements OnInit {
       lastName: user.lastName,
       email: user.email,
       tel: user.tel,
+      team: user.team,
       activated: user.activated,
       langKey: user.langKey,
       authorities: user.authorities,
@@ -91,7 +128,8 @@ export class UserManagementUpdateComponent implements OnInit {
     user.firstName = this.editForm.get(['firstName'])!.value;
     user.lastName = this.editForm.get(['lastName'])!.value;
     user.email = this.editForm.get(['email'])!.value;
-    user.tel=this.editForm.get(['tel'])!.value;
+    user.tel = this.editForm.get(['tel'])!.value;
+    user.team = this.editForm.get(['team'])!.value;
     user.activated = this.editForm.get(['activated'])!.value;
     user.langKey = this.editForm.get(['langKey'])!.value;
     user.authorities = this.editForm.get(['authorities'])!.value;
@@ -104,5 +142,8 @@ export class UserManagementUpdateComponent implements OnInit {
 
   private onSaveError(): void {
     this.isSaving = false;
+  }
+  trackById(index: number, team: SelectableEntity): any {
+    return team.id;
   }
 }

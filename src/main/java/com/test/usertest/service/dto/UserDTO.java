@@ -3,6 +3,7 @@ package com.test.usertest.service.dto;
 import com.test.usertest.config.Constants;
 
 import com.test.usertest.domain.Authority;
+import com.test.usertest.domain.Team;
 import com.test.usertest.domain.User;
 
 import javax.validation.constraints.*;
@@ -30,6 +31,8 @@ public class UserDTO {
 
 
     private int tel;
+
+    private Team team;
 
     @Email
     @Size(min = 5, max = 254)
@@ -64,6 +67,7 @@ public class UserDTO {
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.tel=user.getTel();
+        this.team=user.getTeam();
         this.activated = user.getActivated();
         this.imageUrl = user.getImageUrl();
         this.langKey = user.getLangKey();
@@ -113,6 +117,14 @@ public class UserDTO {
     }
 
     public void setTel(int tel) { this.tel = tel; }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 
     public String getEmail() {
         return email;
@@ -189,12 +201,14 @@ public class UserDTO {
     // prettier-ignore
     @Override
     public String toString() {
+        String teamTemp=(team != null )? team.toString() : "";
         return "UserDTO{" +
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
             ", tel='" + tel + '\'' +
+            ", team='" + teamTemp + '\'' +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +
             ", langKey='" + langKey + '\'' +

@@ -7,9 +7,10 @@ import { UserManagementDetailComponent } from './user-management-detail.componen
 import { UserManagementUpdateComponent } from './user-management-update.component';
 import { UserManagementDeleteDialogComponent } from './user-management-delete-dialog.component';
 import { userManagementRoute } from './user-management.route';
+import { PipeModule } from 'app/shared/pipes/pipe.module';
 
 @NgModule({
-  imports: [UserTestSharedModule, RouterModule.forChild(userManagementRoute)],
+  imports: [UserTestSharedModule, RouterModule.forChild(userManagementRoute),PipeModule],
   declarations: [
     UserManagementComponent,
     UserManagementDetailComponent,

@@ -1,0 +1,3 @@
+entity Team{
+	name String required,
+}

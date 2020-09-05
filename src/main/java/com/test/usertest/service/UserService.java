@@ -2,6 +2,7 @@ package com.test.usertest.service;
 
 import com.test.usertest.config.Constants;
 import com.test.usertest.domain.Authority;
+import com.test.usertest.domain.Team;
 import com.test.usertest.domain.User;
 import com.test.usertest.repository.AuthorityRepository;
 import com.test.usertest.repository.UserRepository;
@@ -143,6 +144,8 @@ public class UserService {
         if (userDTO.getEmail() != null) {
             user.setEmail(userDTO.getEmail().toLowerCase());
         }
+        user.setTel(userDTO.getTel());
+        user.setTeam(userDTO.getTeam());
         user.setImageUrl(userDTO.getImageUrl());
         if (userDTO.getLangKey() == null) {
             user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
@@ -188,6 +191,7 @@ public class UserService {
                     user.setEmail(userDTO.getEmail().toLowerCase());
                 }
                 user.setTel(userDTO.getTel());
+                user.setTeam(userDTO.getTeam());
 
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
@@ -223,7 +227,7 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl,int tel) {
+    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, int tel, Team team) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
@@ -233,6 +237,7 @@ public class UserService {
                     user.setEmail(email.toLowerCase());
                 }
                 user.setTel(tel);
+                user.setTeam(team);
 
                 log.debug("tel=",tel);
                 user.setLangKey(langKey);
