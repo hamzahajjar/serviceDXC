@@ -35,7 +35,7 @@ export class UserManagementUpdateComponent implements OnInit {
     firstName: ['', [Validators.maxLength(50)]],
     lastName: ['', [Validators.maxLength(50)]],
     email: ['', [Validators.minLength(5), Validators.maxLength(254), Validators.email]],
-    tel: [],
+    tel: [undefined,[Validators.required,Validators.minLength(5),Validators.maxLength(50)]],
     team: [],
     activated: [],
     langKey: [],
@@ -62,7 +62,6 @@ export class UserManagementUpdateComponent implements OnInit {
           .subscribe((resBody: ITeam[]) => {
             if (!user.team || !user.team.id) {
               this.teams = resBody;
-              console.warn(this.teams);
             }
             else {
               this.teamService

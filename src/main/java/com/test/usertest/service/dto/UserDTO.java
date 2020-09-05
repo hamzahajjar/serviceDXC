@@ -201,14 +201,14 @@ public class UserDTO {
     // prettier-ignore
     @Override
     public String toString() {
-        String teamTemp=(team != null )? team.toString() : "";
+
         return "UserDTO{" +
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
             ", tel='" + tel + '\'' +
-            ", team='" + teamTemp + '\'' +
+            ", team='" + ((team != null )? team.toString() : "")+ '\'' +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +
             ", langKey='" + langKey + '\'' +

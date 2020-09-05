@@ -238,8 +238,6 @@ public class UserService {
                 }
                 user.setTel(tel);
                 user.setTeam(team);
-
-                log.debug("tel=",tel);
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
                 this.clearUserCaches(user);

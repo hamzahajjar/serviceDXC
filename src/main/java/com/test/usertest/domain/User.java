@@ -242,14 +242,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        String teamTemp=(team != null )? team.toString() : "";
+       
         return "User{" +
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
             ", tel='" + tel+ '\'' +
-            ", team='" + teamTemp + '\'' +
+            ", team='" + ((team != null )? team.toString() : "") + '\'' +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +
