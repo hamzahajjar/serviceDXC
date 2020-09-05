@@ -1,5 +1,6 @@
 package com.test.usertest.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -28,7 +29,8 @@ public class Team implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "team",cascade = { CascadeType.ALL })
+    @JsonIgnore
+    @OneToMany(mappedBy = "team",fetch = FetchType.EAGER)
     private Set<User> users;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

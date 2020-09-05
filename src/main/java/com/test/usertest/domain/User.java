@@ -1,5 +1,6 @@
 package com.test.usertest.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.test.usertest.config.Constants;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -242,7 +243,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-       
+
         return "User{" +
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +

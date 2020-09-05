@@ -68,6 +68,7 @@ public class UserDTO {
         this.email = user.getEmail();
         this.tel=user.getTel();
         this.team=user.getTeam();
+
         this.activated = user.getActivated();
         this.imageUrl = user.getImageUrl();
         this.langKey = user.getLangKey();
@@ -78,6 +79,7 @@ public class UserDTO {
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
+
     }
 
     public Long getId() {

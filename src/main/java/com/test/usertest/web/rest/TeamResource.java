@@ -1,8 +1,12 @@
 package com.test.usertest.web.rest;
 
+import com.test.usertest.config.Constants;
 import com.test.usertest.domain.Team;
+import com.test.usertest.domain.User;
 import com.test.usertest.repository.TeamRepository;
+import com.test.usertest.repository.UserRepository;
 import com.test.usertest.security.AuthoritiesConstants;
+import com.test.usertest.service.dto.UserDTO;
 import com.test.usertest.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -20,6 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * REST controller for managing {@link com.test.usertest.domain.Team}.
@@ -37,6 +42,8 @@ public class TeamResource {
     private String applicationName;
 
     private final TeamRepository teamRepository;
+
+    private  UserRepository userRepository;
 
     public TeamResource(TeamRepository teamRepository) {
         this.teamRepository = teamRepository;
@@ -61,6 +68,7 @@ public class TeamResource {
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
+
 
     /**
      * {@code PUT  /teams} : Updates an existing team.
@@ -109,6 +117,15 @@ public class TeamResource {
         Optional<Team> team = teamRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(team);
     }
+    @GetMapping("/teams/{id}/users")
+    public ResponseEntity<Set<User>> getUsersTeam(@PathVariable Long id)
+    {
+        log.debug("REST request to get Users Team : {}", id);
+        Optional<Team> team =teamRepository.findById(id);
+        Optional<Set<User>> usersTeam= Optional.ofNullable(team.get().getUsers());
+        return ResponseUtil.wrapOrNotFound(usersTeam);
+
+    }
 
     /**
      * {@code DELETE  /teams/:id} : delete the "id" team.
@@ -120,6 +137,12 @@ public class TeamResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteTeam(@PathVariable Long id) {
         log.debug("REST request to delete Team : {}", id);
+        Optional<Team> team =teamRepository.findById(id);
+
+        for (User user:team.get().getUsers()
+             ) {
+            user.setTeam(null);
+        }
         teamRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
     }
