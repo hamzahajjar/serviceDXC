@@ -39,7 +39,7 @@ export const catalogServiceRoute: Routes = [
     path: '',
     component: CatalogServiceComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.ADMIN,Authority.MANAGER],
       pageTitle: 'CatalogServices',
     },
     canActivate: [UserRouteAccessService],

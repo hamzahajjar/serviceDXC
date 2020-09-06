@@ -1,17 +1,21 @@
 package com.test.usertest.web.rest;
 
 import com.test.usertest.domain.CatalogService;
+import com.test.usertest.domain.User;
 import com.test.usertest.repository.CatalogServiceRepository;
 import com.test.usertest.repository.UserRepository;
+import com.test.usertest.security.AuthoritiesConstants;
 import com.test.usertest.security.SecurityUtils;
 import com.test.usertest.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import liquibase.pro.packaged.U;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -91,10 +95,17 @@ public class CatalogServiceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of catalogServices in body.
      */
     @GetMapping("/catalog-services")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.MANAGER + "\")")
     public List<CatalogService> getAllCatalogServices() {
         log.debug("REST request to get all CatalogServices");
-        return catalogServiceRepository.findAll();
+        if (SecurityUtils.isCurrentUserInRole("ROLE_ADMIN")) {
+            return catalogServiceRepository.findAll();
+        } else {
+            return catalogServiceRepository.findByUser(SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).get());
+        }
+
     }
+
 
     /**
      * {@code GET  /catalog-services/:id} : get the "id" catalogService.

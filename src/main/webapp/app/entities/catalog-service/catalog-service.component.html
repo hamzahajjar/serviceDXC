@@ -32,7 +32,7 @@
                 <tr *ngFor="let catalogService of catalogServices ;trackBy: trackId">
                     <td><a [routerLink]="['/catalog-service', catalogService.id, 'view']">{{ catalogService.id }}</a></td>
                     <td>{{ catalogService.sla }}</td>
-                    <td>{{ catalogService.user.login }}</td>
+                    <td *ngIf="catalogService.user">{{ catalogService.user.login }}</td>
                     <td class="text-right">
                         <div class="btn-group">
                             <button type="submit"
