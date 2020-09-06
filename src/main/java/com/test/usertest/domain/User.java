@@ -46,6 +46,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name= "idTeam")
     private Team team;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private Set<CatalogService> catalogServices;
+
 
     @Column(length = 10,unique = true)
     @NotNull
@@ -154,6 +158,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
     public Team getTeam() { return team; }
 
     public void setTeam(Team team) { this.team = team; }
+
+    public Set<CatalogService> getCatalogServices() {
+        return catalogServices;
+    }
+
+    public void setCatalogServices(Set<CatalogService> catalogServices) {
+        this.catalogServices = catalogServices;
+    }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;

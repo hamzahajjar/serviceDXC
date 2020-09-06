@@ -6,7 +6,6 @@ import { User } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
 import { ITeam } from 'app/shared/model/team.model';
 import { TeamService } from 'app/entities/team/team.service';
-import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
 
 type SelectableEntity = ITeam;
@@ -35,8 +34,8 @@ export class UserManagementUpdateComponent implements OnInit {
     firstName: ['', [Validators.maxLength(50)]],
     lastName: ['', [Validators.maxLength(50)]],
     email: ['', [Validators.minLength(5), Validators.maxLength(254), Validators.email]],
-    tel: [undefined,[Validators.required,Validators.minLength(5),Validators.maxLength(50)]],
-    team: [],
+    tel: ['',[Validators.required,Validators.minLength(5),Validators.maxLength(50)]],
+    team:[],
     activated: [],
     langKey: [],
     authorities: [],
@@ -52,31 +51,12 @@ export class UserManagementUpdateComponent implements OnInit {
           this.user.activated = true;
         }
         this.updateForm(user);
-        this.teamService
-          .query({ filter: 'user-is-null' })
-          .pipe(
-            map((res: HttpResponse<ITeam[]>) => {
-              return res.body || [];
-            })
-          )
-          .subscribe((resBody: ITeam[]) => {
-            if (!user.team || !user.team.id) {
-              this.teams = resBody;
-            }
-            else {
-              this.teamService
-                .find(user.team.id)
-                .pipe(
-                  map((subRes: HttpResponse<ITeam>) => {
-                    return subRes.body ? [subRes.body].concat(resBody) : resBody;
-                  })
-                )
-                .subscribe((concatRes: ITeam[]) => (this.teams = concatRes));
-            }
-
-          });
         
       }
+      this.teamService.query().subscribe((res: HttpResponse<ITeam[]>) =>{
+
+        this.teams = res.body || [];
+      } );
 
       this.userService.authorities().subscribe(authorities => {
         this.authorities = authorities;
@@ -128,7 +108,7 @@ export class UserManagementUpdateComponent implements OnInit {
     user.lastName = this.editForm.get(['lastName'])!.value;
     user.email = this.editForm.get(['email'])!.value;
     user.tel = this.editForm.get(['tel'])!.value;
-    user.team = this.editForm.get(['team'])!.value;
+    user.team = this.editForm.get(['team'])!.value ;
     user.activated = this.editForm.get(['activated'])!.value;
     user.langKey = this.editForm.get(['langKey'])!.value;
     user.authorities = this.editForm.get(['authorities'])!.value;

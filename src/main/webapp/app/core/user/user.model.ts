@@ -1,4 +1,5 @@
 import { ITeam } from 'app/shared/model/team.model';
+import { ICatalogService } from 'app/shared/model/catalog-service.model';
 
 export interface IUser {
   id?: any;
@@ -8,6 +9,7 @@ export interface IUser {
   email?: string;
   tel?: any;
   team?: ITeam;
+  catalogServices?: ICatalogService[];
   activated?: boolean;
   langKey?: string;
   authorities?: string[];
@@ -27,6 +29,7 @@ export class User implements IUser {
     public email?: string,
     public tel?:any,
     public team?: ITeam,
+    public catalogServices?: ICatalogService[],
     public activated?: boolean,
     public langKey?: string,
     public authorities?: string[],

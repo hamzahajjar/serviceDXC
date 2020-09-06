@@ -1,0 +1,3 @@
+entity CatalogService{
+	sla Integer,
+}

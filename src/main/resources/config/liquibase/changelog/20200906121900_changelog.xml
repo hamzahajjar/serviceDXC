@@ -1,17 +1,15 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.9.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
-    <changeSet author="DELL (generated)" id="1599235067706-3">
-        <addColumn tableName="jhi_user">
-            <column name="id_team" type="bigint"/>
-        </addColumn>
+    <changeSet author="DELL (generated)" id="1599394823656-3">
+        <addForeignKeyConstraint baseColumnNames="id_user" baseTableName="catalog_service" constraintName="FKkbc0cxtlkvjagbvc9leleyqpr" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
     </changeSet>
-    <changeSet author="DELL (generated)" id="1599235067706-4">
+    <changeSet author="DELL (generated)" id="1599394823656-4">
         <addForeignKeyConstraint baseColumnNames="id_team" baseTableName="jhi_user" constraintName="FKy8huk4q5uonu2xru5cfyfh7k" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="team" validate="true"/>
     </changeSet>
-    <changeSet author="DELL (generated)" id="1599235067706-1">
+    <changeSet author="DELL (generated)" id="1599394823656-1">
         <alterSequence  sequenceName="sequence_generator"/>
     </changeSet>
-    <changeSet author="DELL (generated)" id="1599235067706-2">
+    <changeSet author="DELL (generated)" id="1599394823656-2">
         <addNotNullConstraint columnDataType="int" columnName="tel" tableName="jhi_user" validate="true"/>
     </changeSet>
 </databaseChangeLog>

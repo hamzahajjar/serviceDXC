@@ -1,0 +1,21 @@
+{
+  "name": "CatalogService",
+  "fields": [
+    {
+      "fieldName": "sla",
+      "fieldType": "Integer"
+    }
+  ],
+  "relationships": [],
+  "changelogDate": "20200906102703",
+  "entityTableName": "catalog_service",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

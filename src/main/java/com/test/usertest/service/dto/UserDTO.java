@@ -3,6 +3,7 @@ package com.test.usertest.service.dto;
 import com.test.usertest.config.Constants;
 
 import com.test.usertest.domain.Authority;
+import com.test.usertest.domain.CatalogService;
 import com.test.usertest.domain.Team;
 import com.test.usertest.domain.User;
 
@@ -33,6 +34,8 @@ public class UserDTO {
     private int tel;
 
     private Team team;
+
+    private Set<CatalogService> catalogServices;
 
     @Email
     @Size(min = 5, max = 254)
@@ -68,7 +71,7 @@ public class UserDTO {
         this.email = user.getEmail();
         this.tel=user.getTel();
         this.team=user.getTeam();
-
+        this.catalogServices=user.getCatalogServices();
         this.activated = user.getActivated();
         this.imageUrl = user.getImageUrl();
         this.langKey = user.getLangKey();
@@ -122,6 +125,14 @@ public class UserDTO {
 
     public Team getTeam() {
         return team;
+    }
+
+    public Set<CatalogService> getCatalogServices() {
+        return catalogServices;
+    }
+
+    public void setCatalogServices(Set<CatalogService> catalogServices) {
+        this.catalogServices = catalogServices;
     }
 
     public void setTeam(Team team) {

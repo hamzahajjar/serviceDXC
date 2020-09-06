@@ -1,0 +1,63 @@
+<div>
+    <h2 id="page-heading">
+        <span>Catalog Services</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-catalog-service" [routerLink]="['/catalog-service/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span>
+            Create a new Catalog Service
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="catalogServices?.length === 0">
+        <span>No catalogServices found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="catalogServices && catalogServices.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span>ID</span></th>
+                    <th scope="col" ><span>Sla</span></th>
+                    <th scope="col" ><span>Created By</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let catalogService of catalogServices ;trackBy: trackId">
+                    <td><a [routerLink]="['/catalog-service', catalogService.id, 'view']">{{ catalogService.id }}</a></td>
+                    <td>{{ catalogService.sla }}</td>
+                    <td>{{ catalogService.user.login }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/catalog-service', catalogService.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/catalog-service', catalogService.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(catalogService)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
