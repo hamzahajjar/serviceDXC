@@ -1,5 +1,7 @@
 import { ITeam } from 'app/shared/model/team.model';
 import { ICatalogService } from 'app/shared/model/catalog-service.model';
+import { ISociety } from 'app/shared/model/society.model';
+import {UserType} from '../../shared/model/enumerations/user-type.model'
 
 export interface IUser {
   id?: any;
@@ -9,6 +11,8 @@ export interface IUser {
   email?: string;
   tel?: any;
   team?: ITeam;
+  society?:ISociety;
+  type?:UserType;
   catalogServices?: ICatalogService[];
   activated?: boolean;
   langKey?: string;
@@ -29,6 +33,8 @@ export class User implements IUser {
     public email?: string,
     public tel?:any,
     public team?: ITeam,
+    public type?: UserType,
+    public society?:ISociety,
     public catalogServices?: ICatalogService[],
     public activated?: boolean,
     public langKey?: string,

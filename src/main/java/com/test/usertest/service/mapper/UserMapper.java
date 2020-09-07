@@ -48,7 +48,9 @@ public class UserMapper {
             user.setEmail(userDTO.getEmail());
             user.setTel(userDTO.getTel());
             user.setTeam(userDTO.getTeam());
+            user.setSociety(userDTO.getSociety());
             user.setCatalogServices(userDTO.getCatalogServices());
+            user.setType(userDTO.getType());
             user.setImageUrl(userDTO.getImageUrl());
             user.setActivated(userDTO.isActivated());
             user.setLangKey(userDTO.getLangKey());

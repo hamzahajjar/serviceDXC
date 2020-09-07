@@ -1,0 +1,4 @@
+entity Society{
+	name String,
+    description String,
+}

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.test.usertest.config.Constants;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.test.usertest.domain.enumeration.UserType;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
@@ -45,6 +46,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name= "idTeam")
     private Team team;
+
+    @ManyToOne
+    @JoinColumn(name = "idSociety")
+    private Society society;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private UserType type;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
@@ -159,6 +168,22 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setTeam(Team team) { this.team = team; }
 
+    public Society getSociety() {
+        return society;
+    }
+
+    public void setSociety(Society society) {
+        this.society = society;
+    }
+
+    public UserType getType() {
+        return type;
+    }
+
+    public void setType(UserType type) {
+        this.type = type;
+    }
+
     public Set<CatalogService> getCatalogServices() {
         return catalogServices;
     }
@@ -235,6 +260,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.authorities = authorities;
     }
 
+    public User type(UserType type) {
+        this.type = type;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -263,6 +293,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
             ", email='" + email + '\'' +
             ", tel='" + tel+ '\'' +
             ", team='" + ((team != null )? team.toString() : "") + '\'' +
+            ", society='" + ((society != null )? society.toString() : "") + '\'' +
+            ", type='" + type + '\'' +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +

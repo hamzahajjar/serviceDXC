@@ -2,11 +2,11 @@ package com.test.usertest.service.dto;
 
 import com.test.usertest.config.Constants;
 
-import com.test.usertest.domain.Authority;
-import com.test.usertest.domain.CatalogService;
-import com.test.usertest.domain.Team;
-import com.test.usertest.domain.User;
+import com.test.usertest.domain.*;
+import com.test.usertest.domain.enumeration.UserType;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.*;
 import java.time.Instant;
 import java.util.Set;
@@ -35,7 +35,12 @@ public class UserDTO {
 
     private Team team;
 
+    private Society society;
+
     private Set<CatalogService> catalogServices;
+
+    @Enumerated(EnumType.STRING)
+    private UserType type;
 
     @Email
     @Size(min = 5, max = 254)
@@ -71,7 +76,9 @@ public class UserDTO {
         this.email = user.getEmail();
         this.tel=user.getTel();
         this.team=user.getTeam();
+        this.society=user.getSociety();
         this.catalogServices=user.getCatalogServices();
+        this.type=user.getType();
         this.activated = user.getActivated();
         this.imageUrl = user.getImageUrl();
         this.langKey = user.getLangKey();
@@ -127,16 +134,32 @@ public class UserDTO {
         return team;
     }
 
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
     public Set<CatalogService> getCatalogServices() {
         return catalogServices;
+    }
+
+    public Society getSociety() {
+        return society;
+    }
+
+    public void setSociety(Society society) {
+        this.society = society;
     }
 
     public void setCatalogServices(Set<CatalogService> catalogServices) {
         this.catalogServices = catalogServices;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public UserType getType() {
+        return type;
+    }
+
+    public void setType(UserType type) {
+        this.type = type;
     }
 
     public String getEmail() {
@@ -222,6 +245,8 @@ public class UserDTO {
             ", email='" + email + '\'' +
             ", tel='" + tel + '\'' +
             ", team='" + ((team != null )? team.toString() : "")+ '\'' +
+            ", society='" + ((society != null )? society.toString() : "") + '\'' +
+            ", type='" + type + '\'' +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +
             ", langKey='" + langKey + '\'' +

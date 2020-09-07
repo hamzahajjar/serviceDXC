@@ -2,8 +2,10 @@ package com.test.usertest.service;
 
 import com.test.usertest.config.Constants;
 import com.test.usertest.domain.Authority;
+import com.test.usertest.domain.Society;
 import com.test.usertest.domain.Team;
 import com.test.usertest.domain.User;
+import com.test.usertest.domain.enumeration.UserType;
 import com.test.usertest.repository.AuthorityRepository;
 import com.test.usertest.repository.UserRepository;
 import com.test.usertest.security.AuthoritiesConstants;
@@ -192,7 +194,7 @@ public class UserService {
                 }
                 user.setTel(userDTO.getTel());
                 user.setTeam(userDTO.getTeam());
-
+                user.setType(userDTO.getType());
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
@@ -227,7 +229,7 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, int tel, Team team) {
+    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, int tel, Team team, Society society, UserType type) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
@@ -238,6 +240,8 @@ public class UserService {
                 }
                 user.setTel(tel);
                 user.setTeam(team);
+                user.setSociety(society);
+                user.setType(type);
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
                 this.clearUserCaches(user);
