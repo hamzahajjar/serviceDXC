@@ -46,7 +46,7 @@ export class UserManagementUpdateComponent implements OnInit {
     ],
     firstName: ['', [Validators.maxLength(50)]],
     lastName: ['', [Validators.maxLength(50)]],
-    email: ['', [Validators.minLength(5), Validators.maxLength(254), Validators.email]],
+    email: ['', [Validators.required,Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     tel: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
     type:[],
     team: [],
@@ -72,9 +72,8 @@ export class UserManagementUpdateComponent implements OnInit {
 
         this.teams = res.body || [];
       });
-      this.onTypeSelected();
-      this.editForm.get('team')?.disable();
-      this.editForm.get('society')?.disable();
+      
+      
 
       this.societyService.query().subscribe((res: HttpResponse<ISociety[]>) => {
 
@@ -82,6 +81,7 @@ export class UserManagementUpdateComponent implements OnInit {
       });
       this.userTypes.push(UserType.INTERN);
       this.userTypes.push(UserType.EXTERN);
+      this.onTypeSelected();
      
 
 
@@ -162,21 +162,24 @@ export class UserManagementUpdateComponent implements OnInit {
     return society.id;
   }
   onTypeSelected():void{
-    if(this.selectedType === UserType.INTERN){
+    if(this.editForm.get('type')?.value === UserType.INTERN){
       this.editForm.get('society')?.disable();
-      this.selectedSociety = null;
+      this.editForm.get('society')?.setValue(null)
 
       this.editForm.get('team')?.enable();
       this.authorities=this.internAuthorities;
     }
-    else if(this.selectedType === UserType.EXTERN){
+    else if(this.editForm.get('type')?.value === UserType.EXTERN){
       this.editForm.get('team')?.disable();
-      this.selectedTeam =null;
+      this.editForm.get('team')?.setValue(null);
       this.editForm.get('society')?.enable();
       this.authorities=this.externAuthorities;
 
     }
     else{
+      this.editForm.get('team')?.setValue(null)
+      this.editForm.get('tsociety')?.setValue(null)
+
       this.editForm.get('team')?.disable();
       this.editForm.get('society')?.disable();
       this.authorities=[];

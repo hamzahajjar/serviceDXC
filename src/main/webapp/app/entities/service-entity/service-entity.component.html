@@ -1,0 +1,67 @@
+<div>
+    <h2 id="page-heading">
+        <span>Service Entities</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-service-entity" [routerLink]="['/service-entity/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span>
+            Create a new Service Entity
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="serviceEntities?.length === 0">
+        <span>No serviceEntities found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="serviceEntities && serviceEntities.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span>ID</span></th>
+                    <th scope="col" ><span>Name</span></th>
+                    <th scope="col" ><span>Created By</span></th>
+                    <th scope="col" ><span>Society</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let serviceEntity of serviceEntities ;trackBy: trackId">
+                    <td><a [routerLink]="['/service-entity', serviceEntity.id, 'view']">{{ serviceEntity.id }}</a></td>
+                    <td>{{ serviceEntity.name }}</td>
+                    <td *ngIf="serviceEntity.user">{{ serviceEntity.user.login }}</td>
+                    <td *ngIf="serviceEntity.society">{{ serviceEntity.society.name  }}</td>
+                    <td *ngIf="!serviceEntity.society">(Not Taken)</td>
+
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/service-entity', serviceEntity.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/service-entity', serviceEntity.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(serviceEntity)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

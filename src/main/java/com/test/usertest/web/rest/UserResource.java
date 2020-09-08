@@ -2,6 +2,8 @@ package com.test.usertest.web.rest;
 
 import com.test.usertest.config.Constants;
 import com.test.usertest.domain.User;
+import com.test.usertest.repository.CatalogServiceRepository;
+import com.test.usertest.repository.ServiceEntityRepository;
 import com.test.usertest.repository.UserRepository;
 import com.test.usertest.security.AuthoritiesConstants;
 import com.test.usertest.service.MailService;
@@ -69,11 +71,21 @@ public class UserResource {
 
     private final UserRepository userRepository;
 
+    private final CatalogServiceRepository catalogServiceRepository;
+
+    private final ServiceEntityRepository serviceEntityRepository;
+
     private final MailService mailService;
 
-    public UserResource(UserService userService, UserRepository userRepository, MailService mailService) {
+    public UserResource(UserService userService
+        , UserRepository userRepository
+        , MailService mailService
+        ,CatalogServiceRepository catalogServiceRepository
+        ,ServiceEntityRepository serviceEntityRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
+        this.serviceEntityRepository=serviceEntityRepository;
+        this.catalogServiceRepository=catalogServiceRepository;
         this.mailService = mailService;
     }
 
@@ -183,6 +195,8 @@ public class UserResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
+        userRepository.findOneByLogin(login).get().getCatalogServices().forEach(catalogService -> catalogServiceRepository.delete(catalogService));
+        userRepository.findOneByLogin(login).get().getServiceEntities().forEach(serviceEntity -> serviceEntityRepository.delete(serviceEntity));
         userService.deleteUser(login);
         return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName,  "A user is deleted with identifier " + login, login)).build();
     }

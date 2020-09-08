@@ -194,6 +194,7 @@ public class UserService {
                 }
                 user.setTel(userDTO.getTel());
                 user.setTeam(userDTO.getTeam());
+                user.setSociety((userDTO.getSociety()));
                 user.setType(userDTO.getType());
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());

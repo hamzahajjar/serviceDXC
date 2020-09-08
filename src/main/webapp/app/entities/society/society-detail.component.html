@@ -17,6 +17,29 @@
                     <span>{{ society.description }}</span>
                 </dd>
             </dl>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Members</span></dt>
+                
+            </dl>
+            <div class="table-responsive" id="users" *ngIf="users && users.length > 0">
+                <table class="table table-striped" aria-describedby="page-heading">
+                    <thead>
+                        <tr>
+                            <th scope="col" ><span>ID</span></th>
+                            <th scope="col" ><span>Name</span></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of users ">
+                            <td>{{user.id}}</td>
+                            <td>{{user.login}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
 
             <button type="submit"
                     (click)="previousState()"

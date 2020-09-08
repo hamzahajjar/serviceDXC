@@ -56,8 +56,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private UserType type;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private Set<CatalogService> catalogServices;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    private Set<ServiceEntity> serviceEntities;
 
 
     @Column(length = 10,unique = true)
@@ -190,6 +194,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setCatalogServices(Set<CatalogService> catalogServices) {
         this.catalogServices = catalogServices;
+    }
+
+    public Set<ServiceEntity> getServiceEntities() {
+        return serviceEntities;
+    }
+
+    public void setServiceEntities(Set<ServiceEntity> serviceEntities) {
+        this.serviceEntities = serviceEntities;
     }
 
     public void setLastName(String lastName) {

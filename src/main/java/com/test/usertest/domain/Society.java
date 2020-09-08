@@ -34,6 +34,10 @@ public class Society implements Serializable {
     @OneToMany(mappedBy = "society",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<User> users;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "society",fetch = FetchType.EAGER)
+    private Set<ServiceEntity> serviceEntities;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -77,6 +81,14 @@ public class Society implements Serializable {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public Set<ServiceEntity> getServiceEntities() {
+        return serviceEntities;
+    }
+
+    public void setServiceEntities(Set<ServiceEntity> serviceEntities) {
+        this.serviceEntities = serviceEntities;
     }
 
     @Override

@@ -69,7 +69,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_type">Type</label>
-                    <select [(ngModel)]="selectedType" class="form-control" id="field_type" name="type"
+                    <select  class="form-control" id="field_type" name="type"
                         formControlName="type" (change)='onTypeSelected()'>
                         <option [ngValue]="null"></option>
                         <option *ngFor="let typeOption of userTypes"
@@ -79,7 +79,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_team">Team</label>
-                    <select [(ngModel)]="selectedTeam" class="form-control" id="field_team" name="team"
+                    <select  class="form-control" id="field_team" name="team"
                         formControlName="team">
                         <option [ngValue]="null"></option>
                         <option *ngFor="let teamOption of teams ; trackBy: trackTeamById"
@@ -89,7 +89,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_society">Society</label>
-                    <select [(ngModel)]="selectedSociety" class="form-control" id="field_society" name="society"
+                    <select  class="form-control" id="field_society" name="society"
                         formControlName="society">
                         <option [ngValue]="null"></option>
                         <option *ngFor="let societyOption of societies ; trackBy: trackSocietyById"

@@ -55,6 +55,7 @@ public class CatalogServiceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/catalog-services")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.MANAGER + "\")")
     public ResponseEntity<CatalogService> createCatalogService(@RequestBody CatalogService catalogService) throws URISyntaxException {
         log.debug("REST request to save CatalogService : {}", catalogService);
         if (catalogService.getId() != null) {
@@ -78,6 +79,7 @@ public class CatalogServiceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/catalog-services")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.MANAGER + "\")")
     public ResponseEntity<CatalogService> updateCatalogService(@RequestBody CatalogService catalogService) throws URISyntaxException {
         log.debug("REST request to update CatalogService : {}", catalogService);
         if (catalogService.getId() == null) {
@@ -114,6 +116,7 @@ public class CatalogServiceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the catalogService, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/catalog-services/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.MANAGER + "\")")
     public ResponseEntity<CatalogService> getCatalogService(@PathVariable Long id) {
         log.debug("REST request to get CatalogService : {}", id);
         Optional<CatalogService> catalogService = catalogServiceRepository.findById(id);
@@ -127,6 +130,7 @@ public class CatalogServiceResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/catalog-services/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.MANAGER + "\")")
     public ResponseEntity<Void> deleteCatalogService(@PathVariable Long id) {
         log.debug("REST request to delete CatalogService : {}", id);
         catalogServiceRepository.deleteById(id);

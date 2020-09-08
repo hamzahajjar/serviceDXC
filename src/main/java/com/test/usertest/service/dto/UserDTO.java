@@ -39,6 +39,8 @@ public class UserDTO {
 
     private Set<CatalogService> catalogServices;
 
+    private Set<ServiceEntity> serviceEntities;
+
     @Enumerated(EnumType.STRING)
     private UserType type;
 
@@ -78,6 +80,7 @@ public class UserDTO {
         this.team=user.getTeam();
         this.society=user.getSociety();
         this.catalogServices=user.getCatalogServices();
+        this.serviceEntities=user.getServiceEntities();
         this.type=user.getType();
         this.activated = user.getActivated();
         this.imageUrl = user.getImageUrl();
@@ -138,10 +141,6 @@ public class UserDTO {
         this.team = team;
     }
 
-    public Set<CatalogService> getCatalogServices() {
-        return catalogServices;
-    }
-
     public Society getSociety() {
         return society;
     }
@@ -150,8 +149,20 @@ public class UserDTO {
         this.society = society;
     }
 
+    public Set<CatalogService> getCatalogServices() {
+        return catalogServices;
+    }
+
     public void setCatalogServices(Set<CatalogService> catalogServices) {
         this.catalogServices = catalogServices;
+    }
+
+    public Set<ServiceEntity> getServiceEntities() {
+        return serviceEntities;
+    }
+
+    public void setServiceEntities(Set<ServiceEntity> serviceEntities) {
+        this.serviceEntities = serviceEntities;
     }
 
     public UserType getType() {

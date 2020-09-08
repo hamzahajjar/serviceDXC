@@ -51,7 +51,7 @@ export const catalogServiceRoute: Routes = [
       catalogService: CatalogServiceResolve,
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.ADMIN,Authority.MANAGER],
       pageTitle: 'CatalogServices',
     },
     canActivate: [UserRouteAccessService],
@@ -63,7 +63,7 @@ export const catalogServiceRoute: Routes = [
       catalogService: CatalogServiceResolve,
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.ADMIN,Authority.MANAGER],
       pageTitle: 'CatalogServices',
     },
     canActivate: [UserRouteAccessService],
@@ -75,7 +75,7 @@ export const catalogServiceRoute: Routes = [
       catalogService: CatalogServiceResolve,
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.ADMIN,Authority.MANAGER],
       pageTitle: 'CatalogServices',
     },
     canActivate: [UserRouteAccessService],

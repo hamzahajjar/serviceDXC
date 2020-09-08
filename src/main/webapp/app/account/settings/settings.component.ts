@@ -17,6 +17,7 @@ export class SettingsComponent implements OnInit {
     email: [undefined, [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     tel:[undefined,[Validators.required,Validators.minLength(5),Validators.maxLength(50)]],
     team:[],
+    society:[],
   });
 
   constructor(private accountService: AccountService, private fb: FormBuilder) {}
@@ -30,7 +31,8 @@ export class SettingsComponent implements OnInit {
           lastName: account.lastName,
           email: account.email,
           tel: account.tel,
-          team: ((account.team)? account.team.name: ""),
+          team: ((account.team)? account.team.name : ""),
+          society:((account.society)? account.society.name : "")
         });
 
         this.account = account;
@@ -45,7 +47,6 @@ export class SettingsComponent implements OnInit {
     this.account.lastName = this.settingsForm.get('lastName')!.value;
     this.account.email = this.settingsForm.get('email')!.value;
     this.account.tel=this.settingsForm.get('tel')!.value;
-    this.account.team.name=this.settingsForm.get('team')!.value;
     
 
     this.accountService.save(this.account).subscribe(() => {

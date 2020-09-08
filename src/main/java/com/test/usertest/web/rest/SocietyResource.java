@@ -1,5 +1,6 @@
 package com.test.usertest.web.rest;
 
+import com.test.usertest.domain.ServiceEntity;
 import com.test.usertest.domain.Society;
 import com.test.usertest.domain.Team;
 import com.test.usertest.domain.User;
@@ -92,7 +93,7 @@ public class SocietyResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of societies in body.
      */
     @GetMapping("/societies")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.MANAGER + "\")")
     public List<Society> getAllSocieties() {
         log.debug("REST request to get all Societies");
         return societyRepository.findAll();
@@ -131,6 +132,12 @@ public class SocietyResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteSociety(@PathVariable Long id) {
         log.debug("REST request to delete Society : {}", id);
+        Optional<Society> society =societyRepository.findById(id);
+
+        for (ServiceEntity serviceEntity:society.get().getServiceEntities()
+        ) {
+            serviceEntity.setSociety(null);
+        }
         societyRepository.deleteById(id);
 
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();

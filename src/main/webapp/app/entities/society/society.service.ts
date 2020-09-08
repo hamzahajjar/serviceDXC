@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared/util/request-util';
 import { ISociety } from 'app/shared/model/society.model';
+import { IUser } from 'app/core/user/user.model';
 
 type EntityResponseType = HttpResponse<ISociety>;
 type EntityArrayResponseType = HttpResponse<ISociety[]>;
@@ -30,6 +31,9 @@ export class SocietyService {
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<ISociety[]>(this.resourceUrl, { params: options, observe: 'response' });
+  }
+  getUsersSociety(id: number):Observable<EntityArrayResponseType>{
+    return this.http.get<IUser[]>(`${this.resourceUrl}/${id}/users`,{observe: 'response'});
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {

@@ -110,10 +110,15 @@
                         </small>
                     </div>
                 </div>
-                <div  class="form-group">
-                    <label class="form-control-label" for="tel">Team</label>
-                    <input  type="text" class="form-control" id="team" name="tel" placeholder=""
+                <div *jhiHasAnyAuthority="['ROLE_ADMIN', 'ROLE_MANAGER','ROLE_AGENT']"  class="form-group">
+                    <label class="form-control-label" for="team">Team</label>
+                    <input  type="text" class="form-control" id="team" name="team" placeholder=""
                            formControlName="team">
+                </div>
+                <div *jhiHasAnyAuthority="['ROLE_CUSTOMER']"  class="form-group">
+                    <label class="form-control-label" for="society">Society</label>
+                    <input  type="text" class="form-control" id="society" name="society" placeholder=""
+                           formControlName="society">
                 </div>
 
                 <button type="submit" [disabled]="settingsForm.invalid" class="btn btn-primary">Save</button>

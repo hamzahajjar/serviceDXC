@@ -1,7 +1,7 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h2 id="jhi-catalog-service-heading">Create or edit a Catalog Service</h2>
+            <h2 id="jhi-service-entity-heading">Create or edit a Service Entity</h2>
 
             <div>
                 <jhi-alert-error></jhi-alert-error>
@@ -10,14 +10,25 @@
                     <label for="id">ID</label>
                     <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
                 </div>
-                <div *ngIf="catalogServiceValues.user" class="form-group" [hidden]="!editForm.get('user')!.value.name">
+                <div *ngIf="serviceEntityValues.user" class="form-group" [hidden]="!editForm.get('user')!.value.name">
                     <label for="user">User</label>
                     <input type="text" class="form-control" id="user" name="user" formControlName="user" readonly />
                 </div>
+
                 <div class="form-group">
-                    <label class="form-control-label" for="field_sla">Sla</label>
-                    <input type="number" class="form-control" name="sla" id="field_sla"
-                           formControlName="sla"/>
+                    <label class="form-control-label" for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                           formControlName="name"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_society">Society</label>
+                    <select  class="form-control" id="field_society" name="society"
+                        formControlName="society">
+                        <option [ngValue]="null"></option>
+                        <option *ngFor="let societyOption of societies ; trackBy: trackSocietyById"
+                            [ngValue]="societyOption.id === editForm.get('society')!.value?.id ? editForm.get('society')!.value : societyOption">
+                            {{ societyOption.name }}</option>
+                    </select>
                 </div>
             </div>
 

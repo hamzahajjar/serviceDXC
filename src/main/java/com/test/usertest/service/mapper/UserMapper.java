@@ -50,6 +50,7 @@ public class UserMapper {
             user.setTeam(userDTO.getTeam());
             user.setSociety(userDTO.getSociety());
             user.setCatalogServices(userDTO.getCatalogServices());
+            user.setCatalogServices(userDTO.getCatalogServices());
             user.setType(userDTO.getType());
             user.setImageUrl(userDTO.getImageUrl());
             user.setActivated(userDTO.isActivated());

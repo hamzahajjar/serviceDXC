@@ -14,15 +14,18 @@ import { CatalogServiceService } from './catalog-service.service';
 })
 export class CatalogServiceUpdateComponent implements OnInit {
   isSaving = false;
+  catalogServiceValues!:ICatalogService;
 
   editForm = this.fb.group({
     id: [],
+    user:[],
     sla: [],
   });
 
   constructor(protected catalogServiceService: CatalogServiceService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this.catalogServiceValues=this.editForm.value;
     this.activatedRoute.data.subscribe(({ catalogService }) => {
       this.updateForm(catalogService);
     });
@@ -31,6 +34,7 @@ export class CatalogServiceUpdateComponent implements OnInit {
   updateForm(catalogService: ICatalogService): void {
     this.editForm.patchValue({
       id: catalogService.id,
+      user:catalogService.user,
       sla: catalogService.sla,
     });
   }
@@ -53,6 +57,7 @@ export class CatalogServiceUpdateComponent implements OnInit {
     return {
       ...new CatalogService(),
       id: this.editForm.get(['id'])!.value,
+      user: this.editForm.get(['user'])!.value,
       sla: this.editForm.get(['sla'])!.value,
     };
   }
