@@ -11,17 +11,29 @@ import { ServiceEntityService } from './service-entity.service';
 import { ServiceEntityComponent } from './service-entity.component';
 import { ServiceEntityDetailComponent } from './service-entity-detail.component';
 import { ServiceEntityUpdateComponent } from './service-entity-update.component';
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/user/account.model';
 
 @Injectable({ providedIn: 'root' })
 export class ServiceEntityResolve implements Resolve<IServiceEntity> {
-  constructor(private service: ServiceEntityService, private router: Router) {}
+  currentAccount !: Account;
+  constructor(private service: ServiceEntityService, private router: Router, private accountService: AccountService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<IServiceEntity> | Observable<never> {
     const id = route.params['id'];
+
+    this.accountService.identity().subscribe(account => {
+      if (account) {
+        this.currentAccount = account;
+      }
+    });
     if (id) {
       return this.service.find(id).pipe(
         flatMap((serviceEntity: HttpResponse<ServiceEntity>) => {
-          if (serviceEntity.body) {
+          if (serviceEntity.body && this.currentAccount.authorities.includes(Authority.ADMIN)) {
+            return of(serviceEntity.body);
+          }
+          else if (serviceEntity.body?.user?.login === this.currentAccount.login) {
             return of(serviceEntity.body);
           } else {
             this.router.navigate(['404']);
@@ -39,7 +51,7 @@ export const serviceEntityRoute: Routes = [
     path: '',
     component: ServiceEntityComponent,
     data: {
-      authorities: [Authority.ADMIN,Authority.MANAGER],
+      authorities: [Authority.ADMIN, Authority.MANAGER],
       pageTitle: 'ServiceEntities',
     },
     canActivate: [UserRouteAccessService],

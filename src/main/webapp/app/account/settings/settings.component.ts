@@ -24,6 +24,7 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.settingsForm.get('team')?.disable();
+
     this.accountService.identity().subscribe(account => {
       if (account) {
         this.settingsForm.patchValue({
@@ -34,7 +35,7 @@ export class SettingsComponent implements OnInit {
           team: ((account.team)? account.team.name : ""),
           society:((account.society)? account.society.name : "")
         });
-
+        
         this.account = account;
       }
     });

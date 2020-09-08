@@ -11,19 +11,33 @@ import { CatalogServiceService } from './catalog-service.service';
 import { CatalogServiceComponent } from './catalog-service.component';
 import { CatalogServiceDetailComponent } from './catalog-service-detail.component';
 import { CatalogServiceUpdateComponent } from './catalog-service-update.component';
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/user/account.model';
 
 @Injectable({ providedIn: 'root' })
 export class CatalogServiceResolve implements Resolve<ICatalogService> {
-  constructor(private service: CatalogServiceService, private router: Router) {}
+  currentAccount !: Account;
+  constructor(private service: CatalogServiceService, private router: Router,private accountService:AccountService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<ICatalogService> | Observable<never> {
     const id = route.params['id'];
+    this.accountService.identity().subscribe(account => {
+      if(account){
+        this.currentAccount=account;
+      }
+    })
     if (id) {
       return this.service.find(id).pipe(
         flatMap((catalogService: HttpResponse<CatalogService>) => {
-          if (catalogService.body) {
+          if (catalogService.body && this.currentAccount.authorities.includes(Authority.ADMIN)) {
             return of(catalogService.body);
-          } else {
+          } 
+          else if(catalogService.body?.user?.login === this.currentAccount.login)
+          {
+            return of(catalogService.body);
+          }
+          
+          else {
             this.router.navigate(['404']);
             return EMPTY;
           }
