@@ -43,10 +43,11 @@ public class TeamResource {
 
     private final TeamRepository teamRepository;
 
-    private  UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public TeamResource(TeamRepository teamRepository) {
+    public TeamResource(TeamRepository teamRepository,UserRepository userRepository) {
         this.teamRepository = teamRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -125,6 +126,36 @@ public class TeamResource {
         Optional<Set<User>> usersTeam= Optional.ofNullable(team.get().getUsers());
         return ResponseUtil.wrapOrNotFound(usersTeam);
 
+    }
+
+    @GetMapping("/teams/{id}/leader")
+    public ResponseEntity<Optional<User>> getTeamLeader(@PathVariable Long id){
+        log.debug("REST request to get Team Leader : {}", id);
+        Optional<Team> team=teamRepository.findById(id);
+        Optional<User> leader=Optional.ofNullable(team.get().getLeader());
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(leader));
+    }
+
+    @PostMapping("/teams/{id}/leader")
+    public ResponseEntity<Team> setTeamLeader(@PathVariable Long id,@RequestParam String leaderLogin)throws URISyntaxException{
+        Team team=teamRepository.findById(id).get();
+        Optional<User> leader =userRepository.findOneByLogin(leaderLogin);
+        log.debug("REST request to set Team Leader : {}", team);
+        if (team.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        log.debug("Leader=", leader);
+        for (User user: team.getUsers()
+             ) {
+            if(user.getId() == leader.get().getId()){
+                team.setLeader(leader.get());
+                Team result =teamRepository.save(team);
+                return ResponseEntity.ok()
+                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, team.getId().toString()))
+                    .body(result);
+            }
+        }
+        return ResponseEntity.notFound().build();
     }
 
     /**

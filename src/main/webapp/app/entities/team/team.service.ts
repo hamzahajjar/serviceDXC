@@ -24,6 +24,14 @@ export class TeamService {
     return this.http.put<ITeam>(this.resourceUrl, team, { observe: 'response' });
   }
 
+  setTeamLeader(id:number,leaderLogin:string):Observable<EntityResponseType>{
+    return this.http.post<any>(`${this.resourceUrl}/${id}/leader?leaderLogin=${leaderLogin}`,{ observe: 'response' });
+  }
+
+  getTeamLeader(id:number):Observable<EntityResponseType>{
+    return this.http.get<IUser>(`${this.resourceUrl}/${id}/leader`,{observe:'response'});
+  }
+
   find(id: number): Observable<EntityResponseType> {
     return this.http.get<ITeam>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

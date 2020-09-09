@@ -24,6 +24,8 @@
                         <tr>
                             <th scope="col" ><span>ID</span></th>
                             <th scope="col" ><span>Name</span></th>
+                            <th scope="col" ><span>Team Leader</span></th>
+                            <th scope="col" ><span>Set Leader</span></th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -31,6 +33,9 @@
                         <tr *ngFor="let user of users ">
                             <td>{{user.id}}</td>
                             <td>{{user.login}}</td>
+                            <td *ngIf="user?.id == teamLeader?.id" >(teamLeader)</td>
+                            <td *ngIf="user?.id != teamLeader?.id" ></td>
+                            <td><button type="button" class="btn btn-success" (click)="selectLeader(team.id,user.login)">Select</button></td>
                         </tr>
                     </tbody>
                 </table>

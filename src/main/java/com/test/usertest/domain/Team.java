@@ -33,6 +33,10 @@ public class Team implements Serializable {
     @OneToMany(mappedBy = "team",fetch = FetchType.EAGER)
     private Set<User> users;
 
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "leaderId")
+    private User leader;
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -68,6 +72,14 @@ public class Team implements Serializable {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public User getLeader() {
+        return leader;
+    }
+
+    public void setLeader(User leader) {
+        this.leader = leader;
     }
 
     @Override
