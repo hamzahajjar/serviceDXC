@@ -7,6 +7,10 @@ import { Observable } from 'rxjs';
 
 import { ICatalogService, CatalogService } from 'app/shared/model/catalog-service.model';
 import { CatalogServiceService } from './catalog-service.service';
+import { ServiceEntityService } from '../service-entity/service-entity.service';
+import { IServiceEntity } from 'app/shared/model/service-entity.model';
+
+type SelectableEntity = IServiceEntity;
 
 @Component({
   selector: 'jhi-catalog-service-update',
@@ -15,19 +19,24 @@ import { CatalogServiceService } from './catalog-service.service';
 export class CatalogServiceUpdateComponent implements OnInit {
   isSaving = false;
   catalogServiceValues!:ICatalogService;
+  serviceEntities: IServiceEntity[] =[];
 
   editForm = this.fb.group({
     id: [],
     user:[],
     sla: [],
+    serviceEntity:[],
   });
 
-  constructor(protected catalogServiceService: CatalogServiceService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(protected catalogServiceService: CatalogServiceService,protected serviceEntityService:ServiceEntityService ,protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.catalogServiceValues=this.editForm.value;
     this.activatedRoute.data.subscribe(({ catalogService }) => {
       this.updateForm(catalogService);
+      this.serviceEntityService.query().subscribe((res:HttpResponse<IServiceEntity[]>)=>{
+        this.serviceEntities=res.body || [];
+      })
     });
   }
 
@@ -36,6 +45,7 @@ export class CatalogServiceUpdateComponent implements OnInit {
       id: catalogService.id,
       user:catalogService.user,
       sla: catalogService.sla,
+      serviceEntity:catalogService.serviceEntity,
     });
   }
 
@@ -59,6 +69,7 @@ export class CatalogServiceUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       user: this.editForm.get(['user'])!.value,
       sla: this.editForm.get(['sla'])!.value,
+      serviceEntity: this.editForm.get(['serviceEntity'])!.value,
     };
   }
 
@@ -76,5 +87,8 @@ export class CatalogServiceUpdateComponent implements OnInit {
 
   protected onSaveError(): void {
     this.isSaving = false;
+  }
+  trackServiceEntityById(index: number, serviceEntity: SelectableEntity): any {
+    return serviceEntity.id;
   }
 }

@@ -16,8 +16,17 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_sla">Sla</label>
-                    <input type="number" class="form-control" name="sla" id="field_sla"
-                           formControlName="sla"/>
+                    <input type="number" class="form-control" name="sla" id="field_sla" formControlName="sla" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_serviceEntity">Service Entity</label>
+                    <select class="form-control" id="field_serviceEntity" name="serviceEntity"
+                        formControlName="serviceEntity">
+                        <option [ngValue]="null"></option>
+                        <option *ngFor="let serviceEntityOption of serviceEntities ; trackBy: trackServiceEntityById"
+                            [ngValue]="serviceEntityOption.id === editForm.get('serviceEntity')!.value?.id ? editForm.get('serviceEntity')!.value : serviceEntityOption">
+                            {{ serviceEntityOption.name }}</option>
+                    </select>
                 </div>
             </div>
 
@@ -26,7 +35,8 @@
                     <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
                 </button>
 
-                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving"
+                    class="btn btn-primary">
                     <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
                 </button>
             </div>

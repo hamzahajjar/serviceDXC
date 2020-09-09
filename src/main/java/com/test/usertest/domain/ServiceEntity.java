@@ -1,11 +1,13 @@
 package com.test.usertest.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * A ServiceEntity.
@@ -32,6 +34,12 @@ public class ServiceEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idSociety")
     private  Society society;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "serviceEntity",fetch = FetchType.EAGER)
+    private Set<CatalogService> catalogServices;
+
+
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -60,6 +68,14 @@ public class ServiceEntity implements Serializable {
 
     public void setSociety(Society society) {
         this.society = society;
+    }
+
+    public Set<CatalogService> getCatalogServices() {
+        return catalogServices;
+    }
+
+    public void setCatalogServices(Set<CatalogService> catalogServices) {
+        this.catalogServices = catalogServices;
     }
 
     public ServiceEntity name(String name) {

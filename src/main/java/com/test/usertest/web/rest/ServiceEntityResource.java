@@ -86,7 +86,7 @@ public class ServiceEntityResource {
         if (serviceEntity.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        
+
 
         log.debug("user="+serviceEntity.getUser());
         //serviceEntity.setUser(serviceEntity.getUser());
@@ -136,6 +136,11 @@ public class ServiceEntityResource {
     @DeleteMapping("/service-entities/{id}")
     public ResponseEntity<Void> deleteServiceEntity(@PathVariable Long id) {
         log.debug("REST request to delete ServiceEntity : {}", id);
+        Optional<ServiceEntity> serviceEntity=serviceEntityRepository.findById(id);
+        for (CatalogService catalogService:serviceEntity.get().getCatalogServices()
+        ) {
+            catalogService.setServiceEntity(null);
+        }
         serviceEntityRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
     }

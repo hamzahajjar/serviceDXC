@@ -31,6 +31,10 @@ public class CatalogService implements Serializable {
     @JoinColumn(name= "idUser")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "idServiceEntity")
+    private ServiceEntity serviceEntity;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -62,6 +66,15 @@ public class CatalogService implements Serializable {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
+
+    public ServiceEntity getServiceEntity() {
+        return serviceEntity;
+    }
+
+    public void setServiceEntity(ServiceEntity serviceEntity) {
+        this.serviceEntity = serviceEntity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -85,6 +98,7 @@ public class CatalogService implements Serializable {
             "id=" + getId() +
             ", sla=" + getSla() +
             ", user=" + getUser() +
+            ", serviceEntity='" + ((getServiceEntity() != null )? getServiceEntity().toString() : "") + '\'' +
             "}";
     }
 }
