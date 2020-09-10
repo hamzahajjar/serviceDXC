@@ -33,6 +33,8 @@ public class UserDTO {
 
     private int tel;
 
+    private ServiceEntity serviceEntity;
+
     private Team team;
 
     private Society society;
@@ -40,6 +42,8 @@ public class UserDTO {
     private Set<CatalogService> catalogServices;
 
     private Set<ServiceEntity> serviceEntities;
+
+    private Set<Event> events;
 
     @Enumerated(EnumType.STRING)
     private UserType type;
@@ -79,8 +83,10 @@ public class UserDTO {
         this.tel=user.getTel();
         this.team=user.getTeam();
         this.society=user.getSociety();
+        this.serviceEntity=user.getServiceEntity();
         this.catalogServices=user.getCatalogServices();
         this.serviceEntities=user.getServiceEntities();
+        this.events=user.getEvents();
         this.type=user.getType();
         this.activated = user.getActivated();
         this.imageUrl = user.getImageUrl();
@@ -149,6 +155,14 @@ public class UserDTO {
         this.society = society;
     }
 
+    public ServiceEntity getServiceEntity() {
+        return serviceEntity;
+    }
+
+    public void setServiceEntity(ServiceEntity serviceEntity) {
+        this.serviceEntity = serviceEntity;
+    }
+
     public Set<CatalogService> getCatalogServices() {
         return catalogServices;
     }
@@ -163,6 +177,14 @@ public class UserDTO {
 
     public void setServiceEntities(Set<ServiceEntity> serviceEntities) {
         this.serviceEntities = serviceEntities;
+    }
+
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
     }
 
     public UserType getType() {
@@ -257,6 +279,7 @@ public class UserDTO {
             ", tel='" + tel + '\'' +
             ", team='" + ((team != null )? team.toString() : "")+ '\'' +
             ", society='" + ((society != null )? society.toString() : "") + '\'' +
+            ", serviceEntity='" + ((serviceEntity != null )? serviceEntity.toString() : "") + '\'' +
             ", type='" + type + '\'' +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +

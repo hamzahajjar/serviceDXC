@@ -1,13 +1,13 @@
 import { IUser } from 'app/core/user/user.model';
-import { IServiceEntity } from './service-entity.model';
+import { IServiceOffered } from './service-offered.model';
 
 export interface ICatalogService {
   id?: number;
   sla?: number;
   user?: IUser;
-  serviceEntity?:IServiceEntity;
+  serviceOffered?:IServiceOffered;
 }
 
 export class CatalogService implements ICatalogService {
-  constructor(public id?: number, public sla?: number,public user?:IUser,public serviceEntity?:IServiceEntity) {}
+  constructor(public id?: number, public sla?: number,public user?:IUser,public serviceOffered?:IServiceOffered) {}
 }

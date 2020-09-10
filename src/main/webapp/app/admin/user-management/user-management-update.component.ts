@@ -11,8 +11,11 @@ import { ISociety } from 'app/shared/model/society.model';
 import { SocietyService } from 'app/entities/society/society.service';
 import { UserType } from 'app/shared/model/enumerations/user-type.model';
 import { Authority } from 'app/shared/constants/authority.constants';
+import { IServiceEntity } from 'app/shared/model/service-entity.model';
 
-type SelectableEntity = ITeam;
+type SelectableEntityTeam = ITeam;
+type SelectableEntitySociety =ISociety;
+type SelectableEntityServiceEntity =IServiceEntity;
 
 @Component({
   selector: 'jhi-user-mgmt-update',
@@ -24,14 +27,13 @@ export class UserManagementUpdateComponent implements OnInit {
   isSaving = false;
   teams: ITeam[] = [];
   societies: ISociety[] = [];
+  serviceEntities:IServiceEntity[]=[]
   userTypes:UserType[]=[];
-  selectedType:any;
-  selectedSociety:any;
-  selectedTeam:any;
+
   defaultAuthorities:string[]=[];
   internAuthorities:string[]=[Authority.ADMIN,Authority.MANAGER,Authority.AGENT,Authority.USER]
   externAuthorities:string[]=[Authority.CUSTOMER,Authority.USER];
-  
+  societyTemp!: ISociety;
 
   editForm = this.fb.group({
     id: [],
@@ -51,6 +53,7 @@ export class UserManagementUpdateComponent implements OnInit {
     type:[],
     team: [],
     society: [],
+    serviceEntity:[],
     activated: [],
     langKey: [],
     authorities: [],
@@ -79,6 +82,7 @@ export class UserManagementUpdateComponent implements OnInit {
 
         this.societies = res.body || [];
       });
+ 
       this.userTypes.push(UserType.INTERN);
       this.userTypes.push(UserType.EXTERN);
       this.onTypeSelected();
@@ -127,6 +131,7 @@ export class UserManagementUpdateComponent implements OnInit {
       team: user.team,
       type: user.type,
       society: user.society,
+      serviceEntity:user.serviceEntity,
       activated: user.activated,
       langKey: user.langKey,
       authorities: user.authorities,
@@ -142,6 +147,7 @@ export class UserManagementUpdateComponent implements OnInit {
     user.type =this.editForm.get(['type'])!.value;
     user.team = this.editForm.get(['team'])!.value;
     user.society = this.editForm.get(['society'])!.value;
+    user.serviceEntity=this.editForm.get(['serviceEntity'])!.value;
     user.activated = this.editForm.get(['activated'])!.value;
     user.langKey = this.editForm.get(['langKey'])!.value;
     user.authorities = this.editForm.get(['authorities'])!.value;
@@ -155,16 +161,21 @@ export class UserManagementUpdateComponent implements OnInit {
   private onSaveError(): void {
     this.isSaving = false;
   }
-  trackTeamById(index: number, team: SelectableEntity): any {
+  trackTeamById(index: number, team: SelectableEntityTeam): any {
     return team.id;
   }
-  trackSocietyById(index: number, society: SelectableEntity): any {
+  trackSocietyById(index: number, society: SelectableEntitySociety): any {
     return society.id;
+  }
+  trackServiceEntityById(index: number,serviceEntity: SelectableEntityServiceEntity):any{
+    return serviceEntity.id;
   }
   onTypeSelected():void{
     if(this.editForm.get('type')?.value === UserType.INTERN){
       this.editForm.get('society')?.disable();
+      this.editForm.get('serviceEntity')?.disable();
       this.editForm.get('society')?.setValue(null)
+      this.editForm.get(['serviceEntity'])?.setValue(null);
 
       this.editForm.get('team')?.enable();
       this.authorities=this.internAuthorities;
@@ -173,16 +184,28 @@ export class UserManagementUpdateComponent implements OnInit {
       this.editForm.get('team')?.disable();
       this.editForm.get('team')?.setValue(null);
       this.editForm.get('society')?.enable();
+      this.editForm.get('serviceEntity')?.enable();
       this.authorities=this.externAuthorities;
 
     }
     else{
-      this.editForm.get('team')?.setValue(null)
-      this.editForm.get('tsociety')?.setValue(null)
+      this.editForm.get('team')?.setValue(null);
+      this.editForm.get('society')?.setValue(null);
+      this.editForm.get('serviceEntity')?.setValue(null);
+
 
       this.editForm.get('team')?.disable();
       this.editForm.get('society')?.disable();
+      this.editForm.get('serviceEntity')?.disable();
       this.authorities=[];
     }
+  }
+  onSocietySelected(id:number):void{
+
+      this.societyService.getServiceEntities(id).subscribe((res:HttpResponse<IServiceEntity[]>)=>{
+        this.serviceEntities=res.body || [];
+        console.warn("serviceEnities="+this.serviceEntities);
+      });
+    
   }
 }

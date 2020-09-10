@@ -7,8 +7,9 @@ import { Observable } from 'rxjs';
 
 import { ICatalogService, CatalogService } from 'app/shared/model/catalog-service.model';
 import { CatalogServiceService } from './catalog-service.service';
-import { ServiceEntityService } from '../service-entity/service-entity.service';
 import { IServiceEntity } from 'app/shared/model/service-entity.model';
+import { IServiceOffered } from 'app/shared/model/service-offered.model';
+import { ServiceOfferedService } from '../service-offered/service-offered.service';
 
 type SelectableEntity = IServiceEntity;
 
@@ -19,23 +20,23 @@ type SelectableEntity = IServiceEntity;
 export class CatalogServiceUpdateComponent implements OnInit {
   isSaving = false;
   catalogServiceValues!:ICatalogService;
-  serviceEntities: IServiceEntity[] =[];
+  serviceOffereds: IServiceOffered[] =[];
 
   editForm = this.fb.group({
     id: [],
     user:[],
     sla: [],
-    serviceEntity:[],
+    serviceOffered:[],
   });
 
-  constructor(protected catalogServiceService: CatalogServiceService,protected serviceEntityService:ServiceEntityService ,protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(protected catalogServiceService: CatalogServiceService,protected serviceOfferedService:ServiceOfferedService ,protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.catalogServiceValues=this.editForm.value;
     this.activatedRoute.data.subscribe(({ catalogService }) => {
       this.updateForm(catalogService);
-      this.serviceEntityService.query().subscribe((res:HttpResponse<IServiceEntity[]>)=>{
-        this.serviceEntities=res.body || [];
+      this.serviceOfferedService.query().subscribe((res:HttpResponse<IServiceOffered[]>)=>{
+        this.serviceOffereds=res.body || [];
       })
     });
   }
@@ -45,7 +46,7 @@ export class CatalogServiceUpdateComponent implements OnInit {
       id: catalogService.id,
       user:catalogService.user,
       sla: catalogService.sla,
-      serviceEntity:catalogService.serviceEntity,
+      serviceOffered:catalogService.serviceOffered,
     });
   }
 
@@ -69,7 +70,7 @@ export class CatalogServiceUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       user: this.editForm.get(['user'])!.value,
       sla: this.editForm.get(['sla'])!.value,
-      serviceEntity: this.editForm.get(['serviceEntity'])!.value,
+      serviceOffered: this.editForm.get(['serviceOffered'])!.value,
     };
   }
 
@@ -88,7 +89,7 @@ export class CatalogServiceUpdateComponent implements OnInit {
   protected onSaveError(): void {
     this.isSaving = false;
   }
-  trackServiceEntityById(index: number, serviceEntity: SelectableEntity): any {
-    return serviceEntity.id;
+  trackServiceOfferedById(index: number, serviceOffered: SelectableEntity): any {
+    return serviceOffered.id;
   }
 }

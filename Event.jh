@@ -1,0 +1,7 @@
+entity Event{
+    title String,
+    description String,
+    createdAt Instant,
+    startDate Instant,
+    endDate Instant,
+}

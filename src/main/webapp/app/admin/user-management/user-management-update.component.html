@@ -90,11 +90,21 @@
                 <div class="form-group">
                     <label class="form-control-label" for="field_society">Society</label>
                     <select  class="form-control" id="field_society" name="society"
-                        formControlName="society">
+                        formControlName="society" (change)="onSocietySelected(editForm.get('society')!.value?.id)">
                         <option [ngValue]="null"></option>
                         <option *ngFor="let societyOption of societies ; trackBy: trackSocietyById"
                             [ngValue]="societyOption.id === editForm.get('society')!.value?.id ? editForm.get('society')!.value : societyOption">
                             {{ societyOption.name }}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_serviceEntity">Service Entity</label>
+                    <select  class="form-control" id="field_serviceEntity" name="serviceEntity"
+                        formControlName="serviceEntity" >
+                        <option [ngValue]="null"></option>
+                        <option *ngFor="let serviceEntityOption of serviceEntities ; trackBy: trackServiceEntityById"
+                            [ngValue]="serviceEntityOption.id === editForm.get('serviceEntity')!.value?.id ? editForm.get('serviceEntity')!.value : serviceEntityOption">
+                            {{ serviceEntityOption.name }}</option>
                     </select>
                 </div>
 

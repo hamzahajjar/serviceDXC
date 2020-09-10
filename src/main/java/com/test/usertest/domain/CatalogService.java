@@ -32,8 +32,8 @@ public class CatalogService implements Serializable {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "idServiceEntity")
-    private ServiceEntity serviceEntity;
+    @JoinColumn(name = "idServiceOffered")
+    private ServiceOffered serviceOffered;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -67,12 +67,12 @@ public class CatalogService implements Serializable {
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
 
-    public ServiceEntity getServiceEntity() {
-        return serviceEntity;
+    public ServiceOffered getServiceOffered() {
+        return serviceOffered;
     }
 
-    public void setServiceEntity(ServiceEntity serviceEntity) {
-        this.serviceEntity = serviceEntity;
+    public void setServiceOffered(ServiceOffered serviceOffered) {
+        this.serviceOffered = serviceOffered;
     }
 
     @Override
@@ -98,7 +98,7 @@ public class CatalogService implements Serializable {
             "id=" + getId() +
             ", sla=" + getSla() +
             ", user=" + getUser() +
-            ", serviceEntity='" + ((getServiceEntity() != null )? getServiceEntity().toString() : "") + '\'' +
+            ", serviceEntity='" + ((getServiceOffered() != null )? getServiceOffered().toString() : "") + '\'' +
             "}";
     }
 }

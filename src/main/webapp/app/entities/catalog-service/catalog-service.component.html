@@ -25,7 +25,7 @@
                     <th scope="col" ><span>ID</span></th>
                     <th scope="col" ><span>Sla</span></th>
                     <th scope="col" ><span>Created By</span></th>
-                    <th scope="col" ><span>Service Entity</span></th>
+                    <th scope="col" ><span>Service Offered</span></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -34,8 +34,8 @@
                     <td><a [routerLink]="['/catalog-service', catalogService.id, 'view']">{{ catalogService.id }}</a></td>
                     <td>{{ catalogService.sla }}</td>
                     <td *ngIf="catalogService.user">{{ catalogService.user.login }}</td>
-                    <td *ngIf="catalogService.serviceEntity">{{ catalogService.serviceEntity.name}}</td>
-                    <td *ngIf="!catalogService.serviceEntity"></td>
+                    <td *ngIf="catalogService.serviceOffered">{{ catalogService.serviceOffered.name}}</td>
+                    <td *ngIf="!catalogService.serviceOffered"></td>
                     <td class="text-right">
                         <div class="btn-group">
                             <button type="submit"

@@ -115,10 +115,19 @@ public class SocietyResource {
     @GetMapping("/societies/{id}/users")
     public ResponseEntity<Set<User>> getUsersSociety(@PathVariable Long id)
     {
-        log.debug("REST request to get Users Team : {}", id);
+        log.debug("REST request to get Users Society : {}", id);
         Optional<Society> society =societyRepository.findById(id);
         Optional<Set<User>> usersSociety= Optional.ofNullable(society.get().getUsers());
         return ResponseUtil.wrapOrNotFound(usersSociety);
+
+    }
+    @GetMapping("/societies/{id}/serviceEntities")
+    public ResponseEntity<Set<ServiceEntity>> getServiceEntitiesSociety(@PathVariable Long id)
+    {
+        log.debug("REST request to get Service Entities Society : {}", id);
+        Optional<Society> society =societyRepository.findById(id);
+        Optional<Set<ServiceEntity>> serviceEntitiesSociety= Optional.ofNullable(society.get().getServiceEntities());
+        return ResponseUtil.wrapOrNotFound(serviceEntitiesSociety);
 
     }
 

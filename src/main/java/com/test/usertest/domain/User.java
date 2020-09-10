@@ -64,6 +64,15 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private Set<ServiceEntity> serviceEntities;
 
 
+    @ManyToOne
+    @JoinColumn(name = "serviceEntityId")
+    private ServiceEntity serviceEntity;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "claimer",fetch = FetchType.EAGER)
+    private Set<Event> events;
+
+
     @Column(length = 10,unique = true)
     @NotNull
     private int tel;
@@ -172,6 +181,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setTeam(Team team) { this.team = team; }
 
+    public ServiceEntity getServiceEntity() {
+        return serviceEntity;
+    }
+
+    public void setServiceEntity(ServiceEntity serviceEntity) {
+        this.serviceEntity = serviceEntity;
+    }
+
     public Society getSociety() {
         return society;
     }
@@ -202,6 +219,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setServiceEntities(Set<ServiceEntity> serviceEntities) {
         this.serviceEntities = serviceEntities;
+    }
+
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
     }
 
     public void setLastName(String lastName) {
@@ -306,6 +331,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
             ", tel='" + tel+ '\'' +
             ", team='" + ((team != null )? team.toString() : "") + '\'' +
             ", society='" + ((society != null )? society.toString() : "") + '\'' +
+            ", serviceEntity='" + ((serviceEntity != null )?serviceEntity.toString() : "") + '\'' +
             ", type='" + type + '\'' +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated='" + activated + '\'' +

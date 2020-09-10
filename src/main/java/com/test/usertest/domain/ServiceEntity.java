@@ -36,8 +36,10 @@ public class ServiceEntity implements Serializable {
     private  Society society;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "serviceEntity",fetch = FetchType.EAGER)
-    private Set<CatalogService> catalogServices;
+    @OneToMany(mappedBy = "serviceEntity",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private Set<User> users;
+
+
 
 
 
@@ -70,12 +72,12 @@ public class ServiceEntity implements Serializable {
         this.society = society;
     }
 
-    public Set<CatalogService> getCatalogServices() {
-        return catalogServices;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public void setCatalogServices(Set<CatalogService> catalogServices) {
-        this.catalogServices = catalogServices;
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
     public ServiceEntity name(String name) {

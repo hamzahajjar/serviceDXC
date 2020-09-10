@@ -20,6 +20,14 @@ import { RouterModule } from '@angular/router';
         path: 'service-entity',
         loadChildren: () => import('./service-entity/service-entity.module').then(m => m.UserTestServiceEntityModule),
       },
+      {
+        path: 'event',
+        loadChildren: () => import('./event/event.module').then(m => m.UserTestEventModule),
+      },
+      {
+        path: 'service-offered',
+        loadChildren: () => import('./service-offered/service-offered.module').then(m => m.UserTestServiceOfferedModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

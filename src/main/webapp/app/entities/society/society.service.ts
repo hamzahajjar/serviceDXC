@@ -6,6 +6,7 @@ import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared/util/request-util';
 import { ISociety } from 'app/shared/model/society.model';
 import { IUser } from 'app/core/user/user.model';
+import { IServiceEntity } from 'app/shared/model/service-entity.model';
 
 type EntityResponseType = HttpResponse<ISociety>;
 type EntityArrayResponseType = HttpResponse<ISociety[]>;
@@ -34,6 +35,9 @@ export class SocietyService {
   }
   getUsersSociety(id: number):Observable<EntityArrayResponseType>{
     return this.http.get<IUser[]>(`${this.resourceUrl}/${id}/users`,{observe: 'response'});
+  }
+  getServiceEntities(id: number):Observable<EntityArrayResponseType>{
+    return this.http.get<IServiceEntity[]>(`${this.resourceUrl}/${id}/serviceEntities`,{observe:'response'});
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {

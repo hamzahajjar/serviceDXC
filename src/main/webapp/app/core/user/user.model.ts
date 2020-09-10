@@ -13,6 +13,7 @@ export interface IUser {
   tel?: any;
   team?: ITeam;
   society?:ISociety;
+  serviceEntity?:IServiceEntity;
   type?:UserType;
   catalogServices?: ICatalogService[];
   serviceEntities?:IServiceEntity[];
@@ -37,6 +38,7 @@ export class User implements IUser {
     public team?: ITeam,
     public type?: UserType,
     public society?:ISociety,
+    public serviceEntity?:IServiceEntity,
     public catalogServices?: ICatalogService[],
     public serviceEntities?:IServiceEntity[],
     public activated?: boolean,

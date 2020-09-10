@@ -1,0 +1,3 @@
+entity ServiceOffered{
+	name String,
+}
