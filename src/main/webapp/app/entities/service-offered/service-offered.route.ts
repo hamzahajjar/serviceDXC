@@ -11,13 +11,22 @@ import { ServiceOfferedService } from './service-offered.service';
 import { ServiceOfferedComponent } from './service-offered.component';
 import { ServiceOfferedDetailComponent } from './service-offered-detail.component';
 import { ServiceOfferedUpdateComponent } from './service-offered-update.component';
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/user/account.model';
 
 @Injectable({ providedIn: 'root' })
 export class ServiceOfferedResolve implements Resolve<IServiceOffered> {
-  constructor(private service: ServiceOfferedService, private router: Router) {}
+  currentAccount !:Account;
+  constructor(private service: ServiceOfferedService, private accountService:AccountService,private router: Router) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<IServiceOffered> | Observable<never> {
     const id = route.params['id'];
+
+    this.accountService.identity().subscribe(account =>{
+      if(account){
+        this.currentAccount=account;
+      }
+    });
     if (id) {
       return this.service.find(id).pipe(
         flatMap((serviceOffered: HttpResponse<ServiceOffered>) => {
@@ -39,7 +48,7 @@ export const serviceOfferedRoute: Routes = [
     path: '',
     component: ServiceOfferedComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.ADMIN,Authority.MANAGER],
       pageTitle: 'ServiceOffereds',
     },
     canActivate: [UserRouteAccessService],

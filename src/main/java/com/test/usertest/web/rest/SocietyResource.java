@@ -5,6 +5,7 @@ import com.test.usertest.domain.Society;
 import com.test.usertest.domain.Team;
 import com.test.usertest.domain.User;
 import com.test.usertest.repository.SocietyRepository;
+import com.test.usertest.repository.UserRepository;
 import com.test.usertest.security.AuthoritiesConstants;
 import com.test.usertest.web.rest.errors.BadRequestAlertException;
 
@@ -41,8 +42,11 @@ public class SocietyResource {
 
     private final SocietyRepository societyRepository;
 
-    public SocietyResource(SocietyRepository societyRepository) {
+    private final UserRepository userRepository;
+
+    public SocietyResource(SocietyRepository societyRepository,UserRepository userRepository) {
         this.societyRepository = societyRepository;
+        this.userRepository=userRepository;
     }
 
     /**
@@ -146,6 +150,9 @@ public class SocietyResource {
         for (ServiceEntity serviceEntity:society.get().getServiceEntities()
         ) {
             serviceEntity.setSociety(null);
+        }
+        for(User user:society.get().getUsers()){
+            userRepository.delete(user);
         }
         societyRepository.deleteById(id);
 

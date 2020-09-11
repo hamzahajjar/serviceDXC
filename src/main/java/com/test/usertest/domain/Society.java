@@ -31,7 +31,7 @@ public class Society implements Serializable {
     private String description;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "society",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "society",fetch = FetchType.EAGER)
     private Set<User> users;
 
     @JsonIgnore
