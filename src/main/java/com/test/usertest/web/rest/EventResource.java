@@ -4,6 +4,7 @@ import com.test.usertest.domain.Event;
 import com.test.usertest.repository.EventRepository;
 import com.test.usertest.repository.UserRepository;
 import com.test.usertest.security.SecurityUtils;
+import com.test.usertest.service.MailService;
 import com.test.usertest.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -40,9 +41,12 @@ public class EventResource {
 
     private final UserRepository userRepository;
 
-    public EventResource(EventRepository eventRepository,UserRepository userRepository) {
+    private final MailService mailService;
+
+    public EventResource(EventRepository eventRepository,UserRepository userRepository,MailService mailService) {
         this.eventRepository = eventRepository;
         this.userRepository=userRepository;
+        this.mailService=mailService;
     }
 
     /**
@@ -62,6 +66,8 @@ public class EventResource {
             .flatMap(userRepository::findOneByLogin).ifPresent(user->event.setClaimer(user));
         event.setCreatedAt(new Date(System.currentTimeMillis()).toInstant());
         Event result = eventRepository.save(event);
+        SecurityUtils.getCurrentUserLogin()
+            .flatMap((userRepository::findOneByLogin)).ifPresent(user -> mailService.sendCreationEvent(user,event));
         return ResponseEntity.created(new URI("/api/events/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);

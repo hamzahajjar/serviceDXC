@@ -2,6 +2,7 @@ import { ITeam } from 'app/shared/model/team.model';
 import { ISociety } from 'app/shared/model/society.model';
 import { ICatalogService } from 'app/shared/model/catalog-service.model';
 import { IServiceEntity } from 'app/shared/model/service-entity.model';
+import { UserType } from 'app/shared/model/enumerations/user-type.model';
 
 export class Account {
   constructor(
@@ -10,6 +11,7 @@ export class Account {
     public email: string,
     public tel:any,
     public team:ITeam,
+    public type:UserType,
     public society:ISociety,
     public catalogueServices:ICatalogService[],
     public serviceEntities:IServiceEntity[],

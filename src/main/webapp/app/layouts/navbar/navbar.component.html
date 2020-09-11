@@ -57,7 +57,7 @@
                             <span>Event</span>
                         </a>
                     </li>
-                    <li>
+                    <li *jhiHasAnyAuthority="['ROLE_ADMIN', 'ROLE_MANAGER']">
                         <a class="dropdown-item" routerLink="service-offered" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
                             <span>Service Offered</span>

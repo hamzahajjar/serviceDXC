@@ -9,6 +9,7 @@ import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 
 import { IEvent, Event } from 'app/shared/model/event.model';
 import { EventService } from './event.service';
+import { EventType } from 'app/shared/model/enumerations/event-type.model';
 
 @Component({
   selector: 'jhi-event-update',
@@ -17,9 +18,11 @@ import { EventService } from './event.service';
 export class EventUpdateComponent implements OnInit {
   isSaving = false;
   eventValues!:IEvent;
+  eventTypes: EventType[]=[];
   editForm = this.fb.group({
     id: [],
-    title: [],
+    title: ['',Validators.required],
+    type:['',Validators.required],
     claimer:[],
     description: [],
     createdAt: [],
@@ -40,12 +43,16 @@ export class EventUpdateComponent implements OnInit {
 
       this.updateForm(event);
     });
+      this.eventTypes.push(EventType.DEMAND);
+      this.eventTypes.push(EventType.INCIDENT);
+      this.eventTypes.push(EventType.PROBLEM);
   }
 
   updateForm(event: IEvent): void {
     this.editForm.patchValue({
       id: event.id,
       title: event.title,
+      type:event.type,
       claimer:event.claimer,
       description: event.description,
       createdAt: event.createdAt ? event.createdAt.format(DATE_TIME_FORMAT) : null,
@@ -73,6 +80,7 @@ export class EventUpdateComponent implements OnInit {
       ...new Event(),
       id: this.editForm.get(['id'])!.value,
       title: this.editForm.get(['title'])!.value,
+      type: this.editForm.get(['type'])!.value,
       claimer: this.editForm.get(['claimer'])!.value,
       description: this.editForm.get(['description'])!.value,
       createdAt: this.editForm.get(['createdAt'])!.value ? moment(this.editForm.get(['createdAt'])!.value, DATE_TIME_FORMAT) : undefined,

@@ -1,5 +1,6 @@
 package com.test.usertest.service;
 
+import com.test.usertest.domain.Event;
 import com.test.usertest.domain.User;
 
 import io.github.jhipster.config.JHipsterProperties;
@@ -32,6 +33,8 @@ public class MailService {
 
     private static final String USER = "user";
 
+    private static final String EVENT = "event";
+
     private static final String BASE_URL = "baseUrl";
 
     private final JHipsterProperties jHipsterProperties;
@@ -43,7 +46,7 @@ public class MailService {
     private final SpringTemplateEngine templateEngine;
 
     public MailService(JHipsterProperties jHipsterProperties, JavaMailSender javaMailSender,
-            MessageSource messageSource, SpringTemplateEngine templateEngine) {
+                       MessageSource messageSource, SpringTemplateEngine templateEngine) {
 
         this.jHipsterProperties = jHipsterProperties;
         this.javaMailSender = javaMailSender;
@@ -66,7 +69,7 @@ public class MailService {
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
             log.debug("Sent email to User '{}'", to);
-        }  catch (MailException | MessagingException e) {
+        } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", to, e);
         }
     }
@@ -87,6 +90,22 @@ public class MailService {
     }
 
     @Async
+    void sendEventMailFromTemplate(User user, Event event, String templateName, String titleKey) {
+        if (user.getEmail() == null) {
+            log.debug("Email doesn't exist for user '{}'", user.getLogin());
+            return;
+        }
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(USER, user);
+        context.setVariable(EVENT, event);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        String content = templateEngine.process(templateName, context);
+        String subject = messageSource.getMessage(titleKey, null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
     public void sendActivationEmail(User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
@@ -96,6 +115,13 @@ public class MailService {
     public void sendCreationEmail(User user) {
         log.debug("Sending creation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
+    }
+
+    @Async
+    public void sendCreationEvent(User user, Event event) {
+        log.debug("Sending creation event to '{}'", user.getEmail());
+
+        sendEventMailFromTemplate(user,event,"mail/creationEvent","event.creation.title");
     }
 
     @Async

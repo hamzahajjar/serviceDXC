@@ -24,6 +24,7 @@
                 <tr>
                     <th scope="col" ><span>ID</span></th>
                     <th scope="col" ><span>Title</span></th>
+                    <th scope="col" ><span>Type</span></th>
                     <th scope="col" ><span>Claimer</span></th>
                     <th scope="col" ><span>Created At</span></th>
                     <th scope="col" ><span>Start Date</span></th>
@@ -35,6 +36,7 @@
                 <tr *ngFor="let event of events ;trackBy: trackId">
                     <td><a [routerLink]="['/event', event.id, 'view']">{{ event.id }}</a></td>
                     <td>{{ event.title }}</td>
+                    <td>{{ event.type }}</td>
                     <td *ngIf="event.claimer">{{ event.claimer.login }}</td>
                     <td>{{ event.createdAt | date:'medium' }}</td>
                     <td>{{ event.startDate | date:'medium' }}</td>

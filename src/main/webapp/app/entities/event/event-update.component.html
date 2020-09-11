@@ -12,23 +12,44 @@
                 </div>
                 <div *ngIf="eventValues.claimer" class="form-group" [hidden]="!editForm.get('claimer')!.value.name">
                     <label for="claimer">Claimer</label>
-                    <input type="text" class="form-control" id="claimer" name="claimer" formControlName="claimer" readonly />
+                    <input type="text" class="form-control" id="claimer" name="claimer" formControlName="claimer"
+                        readonly />
                 </div>
 
 
                 <div class="form-group">
                     <label class="form-control-label" for="field_title">Title</label>
-                    <input type="text" class="form-control" name="title" id="field_title"
-                           formControlName="title"/>
+                    <input type="text" class="form-control" name="title" id="field_title" formControlName="title" />
+                    <div
+                        *ngIf="editForm.get('title')!.invalid && (editForm.get('title')!.dirty || editForm.get('title')!.touched)">
+                        <small class="form-text text-danger" *ngIf="editForm.get('title')?.errors?.required">
+                            This field is required.
+                        </small>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-control-label" for="field_description">Description</label>
                     <input type="text" class="form-control" name="description" id="field_description"
-                           formControlName="description"/>
+                        formControlName="description" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_type">Type</label>
+                    <select class="form-control" id="field_type" name="type" formControlName="type">
+                        <option [ngValue]="null"></option>
+                        <option *ngFor="let typeOption of eventTypes"
+                            [ngValue]="typeOption === editForm.get('type')!.value ? editForm.get('type')!.value : typeOption">
+                            {{ typeOption }}</option>
+                    </select>
+                    <div
+                        *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
+                        <small class="form-text text-danger" *ngIf="editForm.get('type')?.errors?.required">
+                            This field is required.
+                        </small>
+                    </div>
                 </div>
 
-          
+
             </div>
 
             <div>
@@ -36,7 +57,8 @@
                     <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
                 </button>
 
-                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving"
+                    class="btn btn-primary">
                     <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
                 </button>
             </div>

@@ -1,9 +1,11 @@
 package com.test.usertest.domain;
 
+import com.test.usertest.domain.enumeration.EventType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -23,11 +25,17 @@ public class Event implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+
     @Column(name = "title")
     private String title;
 
     @Column(name = "description")
     private String description;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private EventType type;
 
     @ManyToOne
     @JoinColumn(name = "idClaimer")
@@ -75,6 +83,14 @@ public class Event implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public EventType getType() {
+        return type;
+    }
+
+    public void setType(EventType type) {
+        this.type = type;
     }
 
     public User getClaimer() {
@@ -148,6 +164,7 @@ public class Event implements Serializable {
             "id=" + getId() +
             ", title='" + getTitle() + "'" +
             ", description='" + getDescription() + "'" +
+            ", type='" + getType() + "'" +
             ", claimer='" + getClaimer() + "'" +
             ", createdAt='" + getCreatedAt() + "'" +
             ", startDate='" + getStartDate() + "'" +

@@ -11,19 +11,31 @@ import { EventService } from './event.service';
 import { EventComponent } from './event.component';
 import { EventDetailComponent } from './event-detail.component';
 import { EventUpdateComponent } from './event-update.component';
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/user/account.model';
+import { UserType } from 'app/shared/model/enumerations/user-type.model';
 
 @Injectable({ providedIn: 'root' })
 export class EventResolve implements Resolve<IEvent> {
-  constructor(private service: EventService, private router: Router) {}
+  currentAccount!:Account;
+  constructor(private service: EventService,private accountService:AccountService, private router: Router) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<IEvent> | Observable<never> {
     const id = route.params['id'];
+    this.accountService.identity().subscribe(account=>{
+      if(account) this.currentAccount = account;
+    });
     if (id) {
       return this.service.find(id).pipe(
         flatMap((event: HttpResponse<Event>) => {
-          if (event.body) {
+          if (event.body && (this.currentAccount.type === UserType.INTERN)) {
             return of(event.body);
-          } else {
+          }
+          else if(event.body?.claimer?.login === this.currentAccount.login)
+          {
+            return of(event.body);
+          }
+           else {
             this.router.navigate(['404']);
             return EMPTY;
           }
