@@ -201,11 +201,18 @@ export class UserManagementUpdateComponent implements OnInit {
     }
   }
   onSocietySelected(id:number):void{
+    if(id){
 
       this.societyService.getServiceEntities(id).subscribe((res:HttpResponse<IServiceEntity[]>)=>{
         this.serviceEntities=res.body || [];
         console.warn("serviceEnities="+this.serviceEntities);
       });
+    }
+    else{
+      this.serviceEntities=[];
+    }
+
+      
     
   }
 }
