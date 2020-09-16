@@ -34,7 +34,7 @@ public class Society implements Serializable {
     @OneToMany(mappedBy = "society",fetch = FetchType.EAGER)
     private Set<User> users;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "society",fetch = FetchType.EAGER)
     private Set<ServiceEntity> serviceEntities;
 
@@ -91,6 +91,10 @@ public class Society implements Serializable {
         this.serviceEntities = serviceEntities;
     }
 
+    public void addServiceEntity(ServiceEntity serviceEntity){
+        this.serviceEntities.add(serviceEntity);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -114,6 +118,7 @@ public class Society implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ",serviceEntities='"+getServiceEntities()+"'"+
             "}";
     }
 }

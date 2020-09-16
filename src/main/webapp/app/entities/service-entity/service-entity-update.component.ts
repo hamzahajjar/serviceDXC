@@ -9,7 +9,9 @@ import { IServiceEntity, ServiceEntity } from 'app/shared/model/service-entity.m
 import { ServiceEntityService } from './service-entity.service';
 import { ISociety } from 'app/shared/model/society.model';
 import { SocietyService } from '../society/society.service';
-type SelectableEntity = ISociety;
+import { ServiceOfferedService } from '../service-offered/service-offered.service';
+import { IServiceOffered } from 'app/shared/model/service-offered.model';
+
 
 @Component({
   selector: 'jhi-service-entity-update',
@@ -18,34 +20,35 @@ type SelectableEntity = ISociety;
 export class ServiceEntityUpdateComponent implements OnInit {
   isSaving = false;
   serviceEntityValues!: IServiceEntity;
+  allServiceOffered: IServiceOffered[] = [];
   societies: ISociety[] = [];
   editForm = this.fb.group({
     id: [],
-    user:[],
+    user: [],
+    society: [],
     name: [Validators.required],
-    society:[],
-    
+    serviceOffereds: [],
   });
 
-  constructor(protected serviceEntityService: ServiceEntityService,protected societyService:SocietyService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(protected serviceEntityService: ServiceEntityService, protected serviceOferredService: ServiceOfferedService, protected societyService: SocietyService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.serviceEntityValues=this.editForm.value;
+    this.serviceEntityValues = this.editForm.value;
     this.activatedRoute.data.subscribe(({ serviceEntity }) => {
       this.updateForm(serviceEntity);
-      this.societyService.query().subscribe((res: HttpResponse<ISociety[]>) => {
+      this.serviceOferredService.query().subscribe((res: HttpResponse<IServiceOffered[]>) => {
+        this.allServiceOffered = res.body || [];
 
-        this.societies = res.body || [];
-      });
+      })
     });
   }
 
   updateForm(serviceEntity: IServiceEntity): void {
     this.editForm.patchValue({
       id: serviceEntity.id,
-      user:serviceEntity.user,
+      user: serviceEntity.user,
       name: serviceEntity.name,
-      society:serviceEntity.society,
+      serviceOffereds: serviceEntity.serviceOffereds,
     });
   }
 
@@ -58,6 +61,7 @@ export class ServiceEntityUpdateComponent implements OnInit {
     const serviceEntity = this.createFromForm();
     if (serviceEntity.id !== undefined) {
       this.subscribeToSaveResponse(this.serviceEntityService.update(serviceEntity));
+      console.warn(serviceEntity);
     } else {
       this.subscribeToSaveResponse(this.serviceEntityService.create(serviceEntity));
     }
@@ -67,9 +71,9 @@ export class ServiceEntityUpdateComponent implements OnInit {
     return {
       ...new ServiceEntity(),
       id: this.editForm.get(['id'])!.value,
-      user:this.editForm.get(['user'])!.value,
+      user: this.editForm.get(['user'])!.value,
       name: this.editForm.get(['name'])!.value,
-      society:this.editForm.get(['society'])!.value,
+      serviceOffereds: this.editForm.get(['serviceOffereds'])?.value,
     };
   }
 
@@ -88,7 +92,5 @@ export class ServiceEntityUpdateComponent implements OnInit {
   protected onSaveError(): void {
     this.isSaving = false;
   }
-  trackSocietyById(index: number, society: SelectableEntity): any {
-    return society.id;
-  }
+
 }

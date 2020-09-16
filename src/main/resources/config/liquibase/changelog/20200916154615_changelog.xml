@@ -1,0 +1,15 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.9.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <changeSet author="DELL (generated)" id="1600271307796-2">
+        <dropForeignKeyConstraint baseTableName="SERVICE_OFFERED_SERVICE_ENTITIES" constraintName="FK2HQRO3D0OU3RYIFIHQ1I6MWDG"/>
+    </changeSet>
+    <changeSet author="DELL (generated)" id="1600271307796-3">
+        <dropForeignKeyConstraint baseTableName="SERVICE_OFFERED_SERVICE_ENTITIES" constraintName="FKBE8YYBDMYBN39TE2IR8WRXL17"/>
+    </changeSet>
+    <changeSet author="DELL (generated)" id="1600271307796-4">
+        <dropTable tableName="SERVICE_OFFERED_SERVICE_ENTITIES"/>
+    </changeSet>
+    <changeSet author="DELL (generated)" id="1600271307796-1">
+        <alterSequence  sequenceName="sequence_generator"/>
+    </changeSet>
+</databaseChangeLog>

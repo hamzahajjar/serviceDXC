@@ -13,6 +13,26 @@
                     <span>{{ serviceEntity.name }}</span>
                 </dd>
             </dl>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Services Offered</span></dt>
+            </dl>
+            <div class="table-responsive" id="serviceOffereds" *ngIf="serviceEntity.serviceOffereds && serviceEntity.serviceOffereds.length > 0">
+                <table class="table table-striped" aria-describedby="page-heading">
+                    <thead>
+                        <tr>
+                            <th scope="col"><span>ID</span></th>
+                            <th scope="col"><span>Name</span></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let serviceOffered of serviceEntity.serviceOffereds ">
+                            <td>{{serviceOffered.id}}</td>
+                            <td>{{serviceOffered.name}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <button type="submit"
                     (click)="previousState()"

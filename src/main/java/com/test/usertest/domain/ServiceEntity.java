@@ -31,6 +31,7 @@ public class ServiceEntity implements Serializable {
     @JoinColumn(name= "idUser")
     private User user;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "idSociety")
     private  Society society;
@@ -38,6 +39,10 @@ public class ServiceEntity implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "serviceEntity",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<User> users;
+
+
+    @ManyToMany
+    private Set<ServiceOffered> serviceOffereds;
 
 
 
@@ -80,6 +85,14 @@ public class ServiceEntity implements Serializable {
         this.users = users;
     }
 
+    public Set<ServiceOffered> getServiceOffereds() {
+        return serviceOffereds;
+    }
+
+    public void setServiceOffereds(Set<ServiceOffered> serviceOffereds) {
+        this.serviceOffereds = serviceOffereds;
+    }
+
     public ServiceEntity name(String name) {
         this.name = name;
         return this;
@@ -113,7 +126,7 @@ public class ServiceEntity implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", user=" + getUser() +
-            ", society='" + ((society != null )? society.toString() : "") + '\'' +
+            ",servicesOffered="+getServiceOffereds()+
             "}";
     }
 }

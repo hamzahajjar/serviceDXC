@@ -7,6 +7,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IServiceEntity } from 'app/shared/model/service-entity.model';
 import { ServiceEntityService } from './service-entity.service';
 import { ServiceEntityDeleteDialogComponent } from './service-entity-delete-dialog.component';
+import { map } from 'rxjs/operators';
+import { ISociety } from 'app/shared/model/society.model';
 
 @Component({
   selector: 'jhi-service-entity',
@@ -23,7 +25,21 @@ export class ServiceEntityComponent implements OnInit, OnDestroy {
   ) {}
 
   loadAll(): void {
-    this.serviceEntityService.query().subscribe((res: HttpResponse<IServiceEntity[]>) => (this.serviceEntities = res.body || []));
+    this.serviceEntityService.query().subscribe((res: HttpResponse<IServiceEntity[]>) => {
+      this.serviceEntities = res.body || [];
+      this.serviceEntities.forEach(serviceEntity => {
+        if(serviceEntity.id)
+        {
+          this.serviceEntityService.getServiceEntitySociety(serviceEntity.id).pipe(
+            map((resSociety:HttpResponse<ISociety>) =>{
+              (resSociety.body)? serviceEntity.society=resSociety.body : null;
+            })
+          ).subscribe();
+        }
+        
+        
+      });
+    });
   }
 
   ngOnInit(): void {

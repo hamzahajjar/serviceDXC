@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 
 import { ISociety, Society } from 'app/shared/model/society.model';
 import { SocietyService } from './society.service';
+import { IServiceEntity } from 'app/shared/model/service-entity.model';
+import { ServiceEntityService } from '../service-entity/service-entity.service';
 
 @Component({
   selector: 'jhi-society-update',
@@ -14,18 +16,23 @@ import { SocietyService } from './society.service';
 })
 export class SocietyUpdateComponent implements OnInit {
   isSaving = false;
+  allServiceEntities:IServiceEntity[]=[];
 
   editForm = this.fb.group({
     id: [],
     name: [],
     description: [],
+    serviceEntities: []
   });
 
-  constructor(protected societyService: SocietyService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(protected societyService: SocietyService,protected serviceEntityService:ServiceEntityService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ society }) => {
       this.updateForm(society);
+      this.serviceEntityService.query().subscribe((res:HttpResponse<IServiceEntity[]>)=>{
+        this.allServiceEntities=res.body || [];
+      })
     });
   }
 
@@ -34,6 +41,7 @@ export class SocietyUpdateComponent implements OnInit {
       id: society.id,
       name: society.name,
       description: society.description,
+      serviceEntities: society.serviceEntities,
     });
   }
 
@@ -57,6 +65,7 @@ export class SocietyUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
       description: this.editForm.get(['description'])!.value,
+      serviceEntities: this.editForm.get(['serviceEntities'])?.value,
     };
   }
 

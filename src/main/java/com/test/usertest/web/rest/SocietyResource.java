@@ -4,9 +4,11 @@ import com.test.usertest.domain.ServiceEntity;
 import com.test.usertest.domain.Society;
 import com.test.usertest.domain.Team;
 import com.test.usertest.domain.User;
+import com.test.usertest.repository.ServiceEntityRepository;
 import com.test.usertest.repository.SocietyRepository;
 import com.test.usertest.repository.UserRepository;
 import com.test.usertest.security.AuthoritiesConstants;
+import com.test.usertest.security.SecurityUtils;
 import com.test.usertest.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -41,12 +43,14 @@ public class SocietyResource {
     private String applicationName;
 
     private final SocietyRepository societyRepository;
+    private final ServiceEntityRepository serviceEntityRepository;
 
     private final UserRepository userRepository;
 
-    public SocietyResource(SocietyRepository societyRepository,UserRepository userRepository) {
+    public SocietyResource(SocietyRepository societyRepository,UserRepository userRepository,ServiceEntityRepository serviceEntityRepository) {
         this.societyRepository = societyRepository;
         this.userRepository=userRepository;
+        this.serviceEntityRepository=serviceEntityRepository;
     }
 
     /**
@@ -63,6 +67,12 @@ public class SocietyResource {
         if (society.getId() != null) {
             throw new BadRequestAlertException("A new society cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        for (ServiceEntity serviceEntity:society.getServiceEntities()
+             ) {
+            serviceEntity.setSociety(society);
+            serviceEntityRepository.save(serviceEntity);
+        }
+
         Society result = societyRepository.save(society);
         return ResponseEntity.created(new URI("/api/societies/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -85,6 +95,12 @@ public class SocietyResource {
         if (society.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        for (ServiceEntity serviceEntity:society.getServiceEntities()
+        ) {
+            serviceEntity.setSociety(society);
+            serviceEntityRepository.save(serviceEntity);
+        }
+
         Society result = societyRepository.save(society);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, society.getId().toString()))
@@ -134,6 +150,7 @@ public class SocietyResource {
         return ResponseUtil.wrapOrNotFound(serviceEntitiesSociety);
 
     }
+
 
     /**
      * {@code DELETE  /societies/:id} : delete the "id" society.

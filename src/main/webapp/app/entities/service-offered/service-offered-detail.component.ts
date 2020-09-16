@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { IServiceEntity } from 'app/shared/model/service-entity.model';
 
 import { IServiceOffered } from 'app/shared/model/service-offered.model';
 
@@ -9,11 +10,15 @@ import { IServiceOffered } from 'app/shared/model/service-offered.model';
 })
 export class ServiceOfferedDetailComponent implements OnInit {
   serviceOffered: IServiceOffered | null = null;
-
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  serviceEntities: IServiceEntity[] | undefined = [] ;
+  constructor(protected activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ serviceOffered }) => (this.serviceOffered = serviceOffered));
+    this.activatedRoute.data.subscribe(({ serviceOffered }) => {
+      this.serviceOffered = serviceOffered;
+      this.serviceEntities=this.serviceOffered?.servoceEntities;
+    }
+    );
   }
 
   previousState(): void {

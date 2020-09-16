@@ -6,14 +6,15 @@ import { IUser } from 'app/core/user/user.model';
 import { SocietyService } from './society.service';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
-
+import { IServiceEntity} from 'app/shared/model/service-entity.model';
 @Component({
   selector: 'jhi-society-detail',
   templateUrl: './society-detail.component.html',
 })
 export class SocietyDetailComponent implements OnInit {
-  society: ISociety | null = null;
+  public society: ISociety | null = null;
   users: IUser[] = [];
+  serviceEntities: IServiceEntity[] = [];
 
   constructor(protected activatedRoute: ActivatedRoute, private societyService: SocietyService) { }
 
@@ -26,6 +27,12 @@ export class SocietyDetailComponent implements OnInit {
             (res.body) ? this.users = res.body : null;
           }
           )).subscribe();
+          this.societyService.getServiceEntities(society.id)
+          .pipe(
+            map((res:HttpResponse<IServiceEntity[]>)=>{
+              ((res.body)? this.serviceEntities =res.body : null);
+            })
+          ).subscribe();
     });
   }
 

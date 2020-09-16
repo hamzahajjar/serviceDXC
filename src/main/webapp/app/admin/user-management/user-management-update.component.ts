@@ -31,7 +31,7 @@ export class UserManagementUpdateComponent implements OnInit {
   userTypes:UserType[]=[];
 
   defaultAuthorities:string[]=[];
-  internAuthorities:string[]=[Authority.ADMIN,Authority.MANAGER,Authority.AGENT,Authority.USER]
+  internAuthorities:string[]=[Authority.ADMIN,Authority.MANAGER,Authority.AGENT,Authority.USER,Authority.LEVEL_1,Authority.LEVEL_2];
   externAuthorities:string[]=[Authority.CUSTOMER,Authority.USER];
   societyTemp!: ISociety;
 

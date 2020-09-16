@@ -25,6 +25,10 @@ export class SocietyService {
     return this.http.put<ISociety>(this.resourceUrl, society, { observe: 'response' });
   }
 
+  createServiceEntity(serviceEntity:IServiceEntity,id:number):Observable<EntityResponseType>{
+    return this.http.post<ISociety>(`${this.resourceUrl}/${id}/serviceEntities`,serviceEntity,{observe:'response'});
+  }
+
   find(id: number): Observable<EntityResponseType> {
     return this.http.get<ISociety>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

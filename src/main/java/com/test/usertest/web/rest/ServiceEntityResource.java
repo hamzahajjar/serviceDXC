@@ -2,6 +2,7 @@ package com.test.usertest.web.rest;
 
 import com.test.usertest.domain.CatalogService;
 import com.test.usertest.domain.ServiceEntity;
+import com.test.usertest.domain.Society;
 import com.test.usertest.repository.ServiceEntityRepository;
 import com.test.usertest.repository.UserRepository;
 import com.test.usertest.security.AuthoritiesConstants;
@@ -90,6 +91,8 @@ public class ServiceEntityResource {
 
         log.debug("user="+serviceEntity.getUser());
         //serviceEntity.setUser(serviceEntity.getUser());
+        ServiceEntity serviceEntityTemp =serviceEntityRepository.findById(serviceEntity.getId()).get();
+        serviceEntity.setSociety(serviceEntityTemp.getSociety());
         ServiceEntity result = serviceEntityRepository.save(serviceEntity);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, serviceEntity.getId().toString()))
@@ -125,6 +128,13 @@ public class ServiceEntityResource {
         log.debug("REST request to get ServiceEntity : {}", id);
         Optional<ServiceEntity> serviceEntity = serviceEntityRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(serviceEntity);
+    }
+    @GetMapping("service-entities/{id}/society")
+    public ResponseEntity<Society> getServiceEntitySociety(@PathVariable Long id){
+        log.debug("REST request to get Service Entity Society :{}",id);
+        Optional<ServiceEntity> serviceEntity=serviceEntityRepository.findById(id);
+        Optional<Society> serviceEntitySociety=Optional.ofNullable(serviceEntity.get().getSociety());
+        return ResponseUtil.wrapOrNotFound(serviceEntitySociety);
     }
 
     /**

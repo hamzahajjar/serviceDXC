@@ -31,6 +31,9 @@ public class ServiceOffered implements Serializable {
     @OneToMany(mappedBy = "serviceOffered",fetch = FetchType.EAGER)
     private Set<CatalogService> catalogServices;
 
+
+
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -60,6 +63,8 @@ public class ServiceOffered implements Serializable {
     public void setCatalogServices(Set<CatalogService> catalogServices) {
         this.catalogServices = catalogServices;
     }
+
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override

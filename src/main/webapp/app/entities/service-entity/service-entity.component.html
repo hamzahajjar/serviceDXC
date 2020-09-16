@@ -34,8 +34,10 @@
                     <td><a [routerLink]="['/service-entity', serviceEntity.id, 'view']">{{ serviceEntity.id }}</a></td>
                     <td>{{ serviceEntity.name }}</td>
                     <td *ngIf="serviceEntity.user">{{ serviceEntity.user.login }}</td>
+                    <td *ngIf="!serviceEntity.user"></td>
+
                     <td *ngIf="serviceEntity.society">{{ serviceEntity.society.name  }}</td>
-                    <td *ngIf="!serviceEntity.society">(Not Taken)</td>
+                    <td *ngIf="!serviceEntity.society"></td>
 
                     <td class="text-right">
                         <div class="btn-group">

@@ -19,14 +19,14 @@
             </dl>
             <dl class="row-md jh-entity-details">
                 <dt><span>Members</span></dt>
-                
+
             </dl>
             <div class="table-responsive" id="users" *ngIf="users && users.length > 0">
                 <table class="table table-striped" aria-describedby="page-heading">
                     <thead>
                         <tr>
-                            <th scope="col" ><span>ID</span></th>
-                            <th scope="col" ><span>Name</span></th>
+                            <th scope="col"><span>ID</span></th>
+                            <th scope="col"><span>Name</span></th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -38,18 +38,41 @@
                     </tbody>
                 </table>
             </div>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Service Entities</span></dt>
+            </dl>
+
+            <br>
+            <br>
+            <div class="table-responsive" id="serviceEntities" *ngIf="serviceEntities && serviceEntities.length > 0">
+                <table class="table table-striped" aria-describedby="page-heading">
+                    <thead>
+                        <tr>
+                            <th scope="col"><span>ID</span></th>
+                            <th scope="col"><span>Name</span></th>
+                            <th scope="col"><span>Created by</span></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let serviceEntity of serviceEntities ">
+                            <td>{{serviceEntity.id}}</td>
+                            <td>{{serviceEntity.name}}</td>
+                            <td *ngIf="serviceEntity.user">{{serviceEntity.user.login}}</td>
+                            <td *ngIf="!serviceEntity.user"></td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
 
 
-            <button type="submit"
-                    (click)="previousState()"
-                    class="btn btn-info">
+            <button type="submit" (click)="previousState()" class="btn btn-info">
                 <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
             </button>
 
-            <button type="button"
-                    [routerLink]="['/society', society.id, 'edit']"
-                    class="btn btn-primary">
+            <button type="button" [routerLink]="['/society', society.id, 'edit']" class="btn btn-primary">
                 <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
             </button>
         </div>

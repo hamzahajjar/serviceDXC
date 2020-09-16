@@ -22,6 +22,12 @@
                     <input type="text" class="form-control" name="description" id="field_description"
                            formControlName="description"/>
                 </div>
+                <div class="form-group">
+                    <label>Service Entities</label>
+                    <select class="form-control" multiple name="serviceEntity" formControlName="serviceEntities">
+                        <option *ngFor="let serviceEntity of allServiceEntities" [value]="serviceEntity">{{ serviceEntity.name }}</option>
+                    </select>
+                </div>
             </div>
 
             <div>
