@@ -31,6 +31,10 @@ public class ServiceOffered implements Serializable {
     @OneToMany(mappedBy = "serviceOffered",fetch = FetchType.EAGER)
     private Set<CatalogService> catalogServices;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "serviceOffered",fetch = FetchType.EAGER)
+    private Set<Event> events;
+
 
 
 
@@ -52,6 +56,7 @@ public class ServiceOffered implements Serializable {
         return this;
     }
 
+
     public void setName(String name) {
         this.name = name;
     }
@@ -64,7 +69,13 @@ public class ServiceOffered implements Serializable {
         this.catalogServices = catalogServices;
     }
 
+    public Set<Event> getEvents() {
+        return events;
+    }
 
+    public void setEvents(Set<Event> events) {
+        this.events = events;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override

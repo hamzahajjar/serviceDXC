@@ -16,7 +16,6 @@ export class ServiceOfferedDetailComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ serviceOffered }) => {
       this.serviceOffered = serviceOffered;
-      this.serviceEntities=this.serviceOffered?.servoceEntities;
     }
     );
   }

@@ -121,6 +121,8 @@ export class UserManagementUpdateComponent implements OnInit {
   }
 
   private updateForm(user: User): void {
+    if(user.society){this.onSocietySelected(user.society);}
+    
     this.editForm.patchValue({
       id: user.id,
       login: user.login,
@@ -171,48 +173,41 @@ export class UserManagementUpdateComponent implements OnInit {
     return serviceEntity.id;
   }
   onTypeSelected():void{
-    if(this.editForm.get('type')?.value === UserType.INTERN){
-      this.editForm.get('society')?.disable();
-      this.editForm.get('serviceEntity')?.disable();
-      this.editForm.get('society')?.setValue(null)
+    if(this.editForm.get(['type'])?.value === UserType.INTERN){
+      this.editForm.get(['society'])?.disable();
+      this.editForm.get(['serviceEntity'])?.disable();
+      this.editForm.get(['society'])?.setValue(null)
       this.editForm.get(['serviceEntity'])?.setValue(null);
 
-      this.editForm.get('team')?.enable();
+      this.editForm.get(['team'])?.enable();
       this.authorities=this.internAuthorities;
     }
-    else if(this.editForm.get('type')?.value === UserType.EXTERN){
-      this.editForm.get('team')?.disable();
-      this.editForm.get('team')?.setValue(null);
-      this.editForm.get('society')?.enable();
-      this.editForm.get('serviceEntity')?.enable();
+    else if(this.editForm.get(['type'])?.value === UserType.EXTERN){
+      this.editForm.get(['team'])?.disable();
+      this.editForm.get(['team'])?.setValue(null);
+      this.editForm.get(['society'])?.enable();
+      this.editForm.get(['serviceEntity'])?.enable();
       this.authorities=this.externAuthorities;
 
     }
     else{
-      this.editForm.get('team')?.setValue(null);
-      this.editForm.get('society')?.setValue(null);
-      this.editForm.get('serviceEntity')?.setValue(null);
+      this.editForm.get(['team'])?.setValue(null);
+      this.editForm.get(['society'])?.setValue(null);
+      this.editForm.get(['serviceEntity'])?.setValue(null);
 
 
-      this.editForm.get('team')?.disable();
-      this.editForm.get('society')?.disable();
-      this.editForm.get('serviceEntity')?.disable();
+      this.editForm.get(['team'])?.disable();
+      this.editForm.get(['society'])?.disable();
+      this.editForm.get(['serviceEntity'])?.disable();
       this.authorities=[];
     }
   }
-  onSocietySelected(id:number):void{
-    if(id){
-
-      this.societyService.getServiceEntities(id).subscribe((res:HttpResponse<IServiceEntity[]>)=>{
-        this.serviceEntities=res.body || [];
-        console.warn("serviceEnities="+this.serviceEntities);
-      });
+  onSocietySelected(society:ISociety):void{
+    if(society.serviceEntities){
+      this.serviceEntities=society.serviceEntities;
     }
     else{
       this.serviceEntities=[];
     }
-
-      
-    
   }
 }

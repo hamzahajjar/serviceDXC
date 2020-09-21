@@ -54,6 +54,8 @@ public class CacheConfiguration {
             createCache(cm, com.test.usertest.domain.ServiceEntity.class.getName());
             createCache(cm, com.test.usertest.domain.Event.class.getName());
             createCache(cm, com.test.usertest.domain.ServiceOffered.class.getName());
+            createCache(cm, com.test.usertest.domain.Affectation.class.getName());
+            createCache(cm, com.test.usertest.domain.Diagnostic.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

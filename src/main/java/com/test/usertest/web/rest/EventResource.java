@@ -1,6 +1,10 @@
 package com.test.usertest.web.rest;
 
+import com.test.usertest.domain.Affectation;
 import com.test.usertest.domain.Event;
+import com.test.usertest.domain.User;
+import com.test.usertest.domain.enumeration.EventStatus;
+import com.test.usertest.repository.AffectationRepository;
 import com.test.usertest.repository.EventRepository;
 import com.test.usertest.repository.UserRepository;
 import com.test.usertest.security.SecurityUtils;
@@ -21,6 +25,7 @@ import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * REST controller for managing {@link com.test.usertest.domain.Event}.
@@ -41,11 +46,14 @@ public class EventResource {
 
     private final UserRepository userRepository;
 
+    private final AffectationRepository affectationRepository;
+
     private final MailService mailService;
 
-    public EventResource(EventRepository eventRepository,UserRepository userRepository,MailService mailService) {
+    public EventResource(EventRepository eventRepository,UserRepository userRepository,MailService mailService,AffectationRepository affectationRepository) {
         this.eventRepository = eventRepository;
         this.userRepository=userRepository;
+        this.affectationRepository=affectationRepository;
         this.mailService=mailService;
     }
 
@@ -65,9 +73,19 @@ public class EventResource {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin).ifPresent(user->event.setClaimer(user));
         event.setCreatedAt(new Date(System.currentTimeMillis()).toInstant());
+        event.setStatus(EventStatus.OnWaiting);
         Event result = eventRepository.save(event);
         SecurityUtils.getCurrentUserLogin()
             .flatMap((userRepository::findOneByLogin)).ifPresent(user -> mailService.sendCreationEvent(user,event));
+        for (User agent:userRepository.findAll()
+             ) {
+            if(agent.getAuthorities().contains("ROLE_AGENT"))
+            {
+                mailService.sendToAgentAfterCreation(agent,event);
+            }
+
+        }
+
         return ResponseEntity.created(new URI("/api/events/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -88,10 +106,21 @@ public class EventResource {
         if (event.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        if(event.getServiceOffered() != null){
+            event.setStatus(EventStatus.Validated);
+        }
         Event result = eventRepository.save(event);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, event.getId().toString()))
             .body(result);
+    }
+
+    @GetMapping("/events/{id}/affectations")
+    public Optional<Set<Affectation>> getEventAffectations(@PathVariable Long id){
+        log.debug("REST request to get Event Affectations : {}", id);
+        Optional<Event> event =eventRepository.findById(id);
+        Optional<Set<Affectation>> eventAffectations=Optional.ofNullable(event.get().getAffectations());
+        return eventAffectations;
     }
 
     /**
@@ -129,5 +158,14 @@ public class EventResource {
         log.debug("REST request to delete Event : {}", id);
         eventRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
+    }
+
+    @PostMapping("/events/{id}/abandon")
+    public ResponseEntity<Event> abandonEvent(@PathVariable Long id){
+        log.debug("REST request to abandon Event : {}", id);
+        Optional<Event> event=eventRepository.findById(id);
+        event.get().setStatus(EventStatus.Abandoned);
+        eventRepository.save(event.get());
+        return ResponseUtil.wrapOrNotFound(event);
     }
 }

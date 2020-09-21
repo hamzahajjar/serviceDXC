@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs';
+import {  Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IEvent } from 'app/shared/model/event.model';
 import { EventService } from './event.service';
-import { EventDeleteDialogComponent } from './event-delete-dialog.component';
+import { EventAbandonDialogComponent } from './event-abandon-dialog.component';
+import {AffectationModalService} from '../../core/affectationModal/affectaion-modal.service';
 
 @Component({
   selector: 'jhi-event',
@@ -16,7 +17,7 @@ export class EventComponent implements OnInit, OnDestroy {
   events?: IEvent[];
   eventSubscriber?: Subscription;
 
-  constructor(protected eventService: EventService, protected eventManager: JhiEventManager, protected modalService: NgbModal) {}
+  constructor(protected eventService: EventService,protected affectationModalService : AffectationModalService, protected eventManager: JhiEventManager, protected modalService: NgbModal) {}
 
   loadAll(): void {
     this.eventService.query().subscribe((res: HttpResponse<IEvent[]>) => (this.events = res.body || []));
@@ -38,12 +39,20 @@ export class EventComponent implements OnInit, OnDestroy {
     return item.id!;
   }
 
+  addAffectation(event:IEvent) : void {
+    console.warn(event.title);
+    this.affectationModalService.open(event);
+    
+  }
+
   registerChangeInEvents(): void {
     this.eventSubscriber = this.eventManager.subscribe('eventListModification', () => this.loadAll());
   }
 
-  delete(event: IEvent): void {
-    const modalRef = this.modalService.open(EventDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+  
+
+  abandon(event: IEvent): void {
+    const modalRef = this.modalService.open(EventAbandonDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.event = event;
   }
 }

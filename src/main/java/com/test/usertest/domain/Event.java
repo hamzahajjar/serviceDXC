@@ -1,5 +1,7 @@
 package com.test.usertest.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.test.usertest.domain.enumeration.EventStatus;
 import com.test.usertest.domain.enumeration.EventType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -9,6 +11,7 @@ import javax.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Set;
 
 /**
  * A Event.
@@ -37,9 +40,25 @@ public class Event implements Serializable {
     @Column(name = "type")
     private EventType type;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name="status")
+    private EventStatus status;
+
     @ManyToOne
     @JoinColumn(name = "idClaimer")
     private User claimer;
+
+    @ManyToOne
+    @JoinColumn(name="id_service_offered")
+    private ServiceOffered serviceOffered;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "event",fetch = FetchType.EAGER)
+    private Set<Affectation> affectations;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "event",fetch = FetchType.EAGER)
+    private Set<Diagnostic> diagnostics;
 
     @Column(name = "created_at")
     private Instant createdAt;
@@ -93,12 +112,36 @@ public class Event implements Serializable {
         this.type = type;
     }
 
+    public EventStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EventStatus status) {
+        this.status = status;
+    }
+
     public User getClaimer() {
         return claimer;
     }
 
     public void setClaimer(User claimer) {
         this.claimer = claimer;
+    }
+
+    public ServiceOffered getServiceOffered() {
+        return serviceOffered;
+    }
+
+    public void setServiceOffered(ServiceOffered serviceOffered) {
+        this.serviceOffered = serviceOffered;
+    }
+
+    public Set<Affectation> getAffectations() {
+        return affectations;
+    }
+
+    public void setAffectations(Set<Affectation> affectations) {
+        this.affectations = affectations;
     }
 
     public Instant getCreatedAt() {
@@ -139,6 +182,14 @@ public class Event implements Serializable {
     public void setEndDate(Instant endDate) {
         this.endDate = endDate;
     }
+
+    public Set<Diagnostic> getDiagnostics() {
+        return diagnostics;
+    }
+
+    public void setDiagnostics(Set<Diagnostic> diagnostics) {
+        this.diagnostics = diagnostics;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -165,7 +216,9 @@ public class Event implements Serializable {
             ", title='" + getTitle() + "'" +
             ", description='" + getDescription() + "'" +
             ", type='" + getType() + "'" +
+            ",status='"+getStatus()+"'"+
             ", claimer='" + getClaimer() + "'" +
+            ",serviceOffered="+getServiceOffered()+
             ", createdAt='" + getCreatedAt() + "'" +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +

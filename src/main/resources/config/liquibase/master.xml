@@ -41,7 +41,17 @@
     <include file="config/liquibase/changelog/20200910175410_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200911161316_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200916154615_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200916161507_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200916180910_changelog.xml" relativeToChangelogFile="false"/>
 
+
+
+    <include file="config/liquibase/changelog/20200916222806_added_entity_Affectation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200916224315_changelog.xml" relativeToChangelogFile="false"/>
+
+
+    <include file="config/liquibase/changelog/20200920191800_added_entity_Diagnostic.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200920193323_changelog.xml" relativeToChangelogFile="false"/>
 
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->

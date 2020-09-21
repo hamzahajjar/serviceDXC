@@ -34,6 +34,10 @@ public class Team implements Serializable {
     private Set<User> users;
 
     @JsonIgnore
+    @OneToMany(mappedBy = "team",fetch = FetchType.EAGER)
+    private Set<Affectation> affectations;
+
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "leaderId")
     private User leader;
@@ -76,6 +80,14 @@ public class Team implements Serializable {
 
     public User getLeader() {
         return leader;
+    }
+
+    public Set<Affectation> getAffectations() {
+        return affectations;
+    }
+
+    public void setAffectations(Set<Affectation> affectations) {
+        this.affectations = affectations;
     }
 
     public void setLeader(User leader) {

@@ -7,11 +7,11 @@ import { SocietyDetailComponent } from './society-detail.component';
 import { SocietyUpdateComponent } from './society-update.component';
 import { SocietyDeleteDialogComponent } from './society-delete-dialog.component';
 import { societyRoute } from './society.route';
-import { ServiceEntityModalComponent } from 'app/core/serviceEntity/serviceEntityModal.component';
+
 
 @NgModule({
   imports: [UserTestSharedModule, RouterModule.forChild(societyRoute)],
-  declarations: [SocietyComponent, SocietyDetailComponent, SocietyUpdateComponent, SocietyDeleteDialogComponent,ServiceEntityModalComponent],
+  declarations: [SocietyComponent, SocietyDetailComponent, SocietyUpdateComponent, SocietyDeleteDialogComponent],
   entryComponents: [SocietyDeleteDialogComponent],
 })
 export class UserTestSocietyModule {}

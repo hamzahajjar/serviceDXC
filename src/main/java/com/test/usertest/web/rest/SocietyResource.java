@@ -61,19 +61,20 @@ public class SocietyResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/societies")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.MANAGER + "\")")
     public ResponseEntity<Society> createSociety(@RequestBody Society society) throws URISyntaxException {
         log.debug("REST request to save Society : {}", society);
         if (society.getId() != null) {
             throw new BadRequestAlertException("A new society cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+
+        Society result = societyRepository.save(society);
         for (ServiceEntity serviceEntity:society.getServiceEntities()
-             ) {
+        ) {
             serviceEntity.setSociety(society);
             serviceEntityRepository.save(serviceEntity);
         }
-
-        Society result = societyRepository.save(society);
         return ResponseEntity.created(new URI("/api/societies/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -89,19 +90,20 @@ public class SocietyResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/societies")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.MANAGER + "\")")
     public ResponseEntity<Society> updateSociety(@RequestBody Society society) throws URISyntaxException {
         log.debug("REST request to update Society : {}", society);
         if (society.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+
+
+        Society result = societyRepository.save(society);
         for (ServiceEntity serviceEntity:society.getServiceEntities()
         ) {
             serviceEntity.setSociety(society);
             serviceEntityRepository.save(serviceEntity);
         }
-
-        Society result = societyRepository.save(society);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, society.getId().toString()))
             .body(result);
@@ -126,7 +128,7 @@ public class SocietyResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the society, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/societies/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.MANAGER + "\")")
     public ResponseEntity<Society> getSociety(@PathVariable Long id) {
         log.debug("REST request to get Society : {}", id);
         Optional<Society> society = societyRepository.findById(id);

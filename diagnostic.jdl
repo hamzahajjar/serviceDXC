@@ -1,0 +1,3 @@
+entity Diagnostic {
+	description String,
+}

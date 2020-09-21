@@ -10,6 +10,10 @@ import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { IEvent, Event } from 'app/shared/model/event.model';
 import { EventService } from './event.service';
 import { EventType } from 'app/shared/model/enumerations/event-type.model';
+import { IServiceOffered } from 'app/shared/model/service-offered.model';
+import { IUser } from 'app/core/user/user.model';
+
+type SelectableEntityServiceOffered = IServiceOffered;
 
 @Component({
   selector: 'jhi-event-update',
@@ -19,10 +23,13 @@ export class EventUpdateComponent implements OnInit {
   isSaving = false;
   eventValues!:IEvent;
   eventTypes: EventType[]=[];
+  claimer!:IUser;
+  serviceOffereds:IServiceOffered[]=[];
   editForm = this.fb.group({
     id: [],
     title: ['',Validators.required],
     type:['',Validators.required],
+    serviceOffered:[],
     claimer:[],
     description: [],
     createdAt: [],
@@ -34,6 +41,7 @@ export class EventUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.eventValues= this.editForm.value;
+    this.claimer=this.editForm.get('claimer')?.value;
     this.activatedRoute.data.subscribe(({ event }) => {
       if (!event.id) {
         event.createdAt = null;
@@ -49,16 +57,24 @@ export class EventUpdateComponent implements OnInit {
   }
 
   updateForm(event: IEvent): void {
+    
+    if(event.claimer)
+    {
+      if(event.claimer.serviceEntity?.serviceOffereds) this.serviceOffereds=event.claimer.serviceEntity?.serviceOffereds;
+    }
     this.editForm.patchValue({
       id: event.id,
       title: event.title,
       type:event.type,
+      serviceOffered:event.serviceOffered || null,
       claimer:event.claimer,
       description: event.description,
       createdAt: event.createdAt ? event.createdAt.format(DATE_TIME_FORMAT) : null,
       startDate: event.startDate ? event.startDate.format(DATE_TIME_FORMAT) : null,
       endDate: event.endDate ? event.endDate.format(DATE_TIME_FORMAT) : null,
     });
+    console.warn(this.editForm.value);
+    
   }
 
   previousState(): void {
@@ -70,6 +86,7 @@ export class EventUpdateComponent implements OnInit {
     const event = this.createFromForm();
     if (event.id !== undefined) {
       this.subscribeToSaveResponse(this.eventService.update(event));
+      console.warn(event);
     } else {
       this.subscribeToSaveResponse(this.eventService.create(event));
     }
@@ -81,7 +98,8 @@ export class EventUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       title: this.editForm.get(['title'])!.value,
       type: this.editForm.get(['type'])!.value,
-      claimer: this.editForm.get(['claimer'])!.value,
+      serviceOffered: this.editForm.get(['serviceOffered'])?.value,
+      claimer: this.editForm.get(['claimer'])!.value ,
       description: this.editForm.get(['description'])!.value,
       createdAt: this.editForm.get(['createdAt'])!.value ? moment(this.editForm.get(['createdAt'])!.value, DATE_TIME_FORMAT) : undefined,
       startDate: this.editForm.get(['startDate'])!.value ? moment(this.editForm.get(['startDate'])!.value, DATE_TIME_FORMAT) : undefined,
@@ -103,5 +121,8 @@ export class EventUpdateComponent implements OnInit {
 
   protected onSaveError(): void {
     this.isSaving = false;
+  }
+  trackServiceOfferedById(index: number, serviceOffered: SelectableEntityServiceOffered): any {
+    return serviceOffered.id;
   }
 }

@@ -6,9 +6,9 @@ import { IEvent } from 'app/shared/model/event.model';
 import { EventService } from './event.service';
 
 @Component({
-  templateUrl: './event-delete-dialog.component.html',
+  templateUrl: './event-abandon-dialog.component.html',
 })
-export class EventDeleteDialogComponent {
+export class EventAbandonDialogComponent {
   event?: IEvent;
 
   constructor(protected eventService: EventService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {}
@@ -17,8 +17,8 @@ export class EventDeleteDialogComponent {
     this.activeModal.dismiss();
   }
 
-  confirmDelete(id: number): void {
-    this.eventService.delete(id).subscribe(() => {
+  confirmAbandon(id: number): void {
+    this.eventService.abandonEvent(id).subscribe(() => {
       this.eventManager.broadcast('eventListModification');
       this.activeModal.close();
     });

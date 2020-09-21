@@ -2,10 +2,12 @@
     <h2 id="page-heading">
         <span>Events</span>
 
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-event" [routerLink]="['/event/new']">
+
+        <button *jhiHasAnyAuthority="['ROLE_ADMIN', 'ROLE_CUSTOMER']" id="jh-create-entity"
+            class="btn btn-primary float-right jh-create-entity create-event" [routerLink]="['/event/new']">
             <fa-icon icon="plus"></fa-icon>
             <span>
-            Create a new Event
+                Create a new Event
             </span>
         </button>
     </h2>
@@ -22,13 +24,14 @@
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
                 <tr>
-                    <th scope="col" ><span>ID</span></th>
-                    <th scope="col" ><span>Title</span></th>
-                    <th scope="col" ><span>Type</span></th>
-                    <th scope="col" ><span>Claimer</span></th>
-                    <th scope="col" ><span>Created At</span></th>
-                    <th scope="col" ><span>Start Date</span></th>
-                    <th scope="col" ><span>End Date</span></th>
+                    <th scope="col"><span>ID</span></th>
+                    <th scope="col"><span>Title</span></th>
+                    <th scope="col"><span>Type</span></th>
+                    <th scope="col"><span>Status</span></th>
+                    <th scope="col"><span>Claimer</span></th>
+                    <th scope="col"><span>Created At</span></th>
+                    <th scope="col"><span>Start Date</span></th>
+                    <th scope="col"><span>End Date</span></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -37,30 +40,37 @@
                     <td><a [routerLink]="['/event', event.id, 'view']">{{ event.id }}</a></td>
                     <td>{{ event.title }}</td>
                     <td>{{ event.type }}</td>
+                    <td *ngIf="event.status">{{ event.status }}</td>
+                    <td *ngIf="!event.status"></td>
                     <td *ngIf="event.claimer">{{ event.claimer.login }}</td>
                     <td>{{ event.createdAt | date:'medium' }}</td>
                     <td>{{ event.startDate | date:'medium' }}</td>
                     <td>{{ event.endDate | date:'medium' }}</td>
                     <td class="text-right">
                         <div class="btn-group">
-                            <button type="submit"
-                                    [routerLink]="['/event', event.id, 'view']"
-                                    class="btn btn-info btn-sm">
+                            <div *jhiHasAnyAuthority="['ROLE_ADMIN','ROLE_AGENT','ROLE_LEVEL_1']">
+                            <button *ngIf="event.status !== 'Abandoned'"  (click)="addAffectation(event)"
+                                class="btn btn-success btn-sm">
+                                <fa-icon icon="arrow-left"></fa-icon>
+                                <span class="d-none d-md-inline">Affect</span>
+                            </button>
+                        </div>
+                            <button *jhiHasAnyAuthority="['ROLE_ADMIN', 'ROLE_CUSTOMER']" type="submit"
+                                [routerLink]="['/event', event.id, 'view']" class="btn btn-info btn-sm">
                                 <fa-icon icon="eye"></fa-icon>
                                 <span class="d-none d-md-inline">View</span>
                             </button>
 
-                            <button type="submit"
-                                    [routerLink]="['/event', event.id, 'edit']"
-                                    class="btn btn-primary btn-sm">
+                            <button *jhiHasAnyAuthority="['ROLE_ADMIN', 'ROLE_CUSTOMER','ROLE_AGENT']" type="submit"
+                                [routerLink]="['/event', event.id, 'edit']" class="btn btn-primary btn-sm">
                                 <fa-icon icon="pencil-alt"></fa-icon>
                                 <span class="d-none d-md-inline">Edit</span>
                             </button>
 
-                            <button type="submit" (click)="delete(event)"
-                                    class="btn btn-danger btn-sm">
+                            <button *ngIf="event.status !== 'Abandoned'" type="submit" (click)="abandon(event)"
+                                class="btn btn-danger btn-sm">
                                 <fa-icon icon="times"></fa-icon>
-                                <span class="d-none d-md-inline">Delete</span>
+                                <span class="d-none d-md-inline">Abandon</span>
                             </button>
                         </div>
                     </td>

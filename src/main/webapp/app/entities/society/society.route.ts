@@ -39,7 +39,7 @@ export const societyRoute: Routes = [
     path: '',
     component: SocietyComponent,
     data: {
-      authorities: [Authority.ADMIN],
+      authorities: [Authority.ADMIN,Authority.MANAGER],
       pageTitle: 'Societies',
     },
     canActivate: [UserRouteAccessService],

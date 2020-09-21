@@ -1,0 +1,46 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="affectation">
+            <h2><span>Affectation</span> {{ affectation.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span>Event Title</span></dt>
+                <dd *ngIf="affectation.event">
+                    <span>{{ affectation.event.title }}</span>
+                </dd>
+                <dt><span>Event description</span></dt>
+                <dd *ngIf="affectation.event">
+                    <span>{{ affectation.event.description}}</span>
+                </dd>
+                <dt><span>Event type</span></dt>
+                <dd *ngIf="affectation.event">
+                    <span>{{ affectation.event.type }}</span>
+                </dd>
+                <dt><span>Start Date</span></dt>
+                <dd>
+                    <span>{{ affectation.startDate | date: 'medium' }}</span>
+                </dd>
+                <dt><span>End Date</span></dt>
+                <dd>
+                    <span>{{ affectation.endDate | date: 'medium' }}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/affectation', affectation.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

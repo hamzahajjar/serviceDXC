@@ -1,6 +1,8 @@
 package com.test.usertest.service;
 
+import com.test.usertest.domain.Affectation;
 import com.test.usertest.domain.Event;
+import com.test.usertest.domain.Team;
 import com.test.usertest.domain.User;
 
 import io.github.jhipster.config.JHipsterProperties;
@@ -34,6 +36,10 @@ public class MailService {
     private static final String USER = "user";
 
     private static final String EVENT = "event";
+
+    private static final String TEAM="team";
+
+    private static final String AFFECTATION="affectation";
 
     private static final String BASE_URL = "baseUrl";
 
@@ -106,6 +112,23 @@ public class MailService {
     }
 
     @Async
+    void sendAffectationFromTemplate(Team team, Affectation affectation, String templateName, String titleKey){
+        if(team.getLeader().getEmail() == null){
+            log.debug("Email doesn't exist for teamLeader {}",team.getLeader().getLogin());
+            return;
+        }
+        Locale locale=Locale.forLanguageTag(team.getLeader().getLangKey());
+        Context context =new Context(locale);
+        context.setVariable(TEAM,team);
+        context.setVariable(AFFECTATION,affectation);
+        context.setVariable(BASE_URL,jHipsterProperties.getMail().getBaseUrl());
+        String content=templateEngine.process(templateName,context);
+        String subject =messageSource.getMessage(titleKey,null,locale);
+        sendEmail(team.getLeader().getEmail(),subject,content,false,true);
+
+    }
+
+    @Async
     public void sendActivationEmail(User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
@@ -122,6 +145,13 @@ public class MailService {
         log.debug("Sending creation event to '{}'", user.getEmail());
 
         sendEventMailFromTemplate(user,event,"mail/creationEvent","event.creation.title");
+    }
+
+    @Async
+    public void sendToAgentAfterCreation(User agent,Event event){
+        log.debug("Sending creation event to '{}'", agent.getEmail());
+        sendEventMailFromTemplate(agent,event,"mail/agentEventAfterCreation","agent.event.title");
+
     }
 
     @Async

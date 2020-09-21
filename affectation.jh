@@ -1,0 +1,4 @@
+entity Affectation{
+	startDate Instant,
+    endDate Instant,
+}

@@ -16,24 +16,21 @@ export class SettingsComponent implements OnInit {
     lastName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     email: [undefined, [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     tel:[undefined,[Validators.required,Validators.minLength(5),Validators.maxLength(50)]],
-    team:[],
-    society:[],
   });
 
   constructor(private accountService: AccountService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.settingsForm.get('team')?.disable();
 
     this.accountService.identity().subscribe(account => {
+      console.warn(account);
       if (account) {
         this.settingsForm.patchValue({
           firstName: account.firstName,
           lastName: account.lastName,
           email: account.email,
           tel: account.tel,
-          team: ((account.team)? account.team.name : ""),
-          society:((account.society)? account.society.name : "")
+          
         });
         
         this.account = account;

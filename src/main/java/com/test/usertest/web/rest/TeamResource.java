@@ -99,7 +99,7 @@ public class TeamResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of teams in body.
      */
     @GetMapping("/teams")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+
     public List<Team> getAllTeams() {
         log.debug("REST request to get all Teams");
         return teamRepository.findAll();
@@ -112,7 +112,6 @@ public class TeamResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the team, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/teams/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Team> getTeam(@PathVariable Long id) {
         log.debug("REST request to get Team : {}", id);
         Optional<Team> team = teamRepository.findById(id);

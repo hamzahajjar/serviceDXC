@@ -1,0 +1,63 @@
+<div>
+    <h2 id="page-heading">
+        <span>Affectations</span>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="affectations?.length === 0">
+        <span>No affectations found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="affectations && affectations.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span>ID</span></th>
+                    <th scope="col" ><span>Event</span></th>
+                    <th scope="col" ><span>Team</span></th>
+                    <th scope="col" ><span>Start Date</span></th>
+                    <th scope="col" ><span>End Date</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let affectation of affectations ;trackBy: trackId">
+                    <td><a [routerLink]="['/affectation', affectation.id, 'view']">{{ affectation.id }}</a></td>
+                    <td>{{ affectation.event?.title }}</td>
+                    <td >{{ affectation.team?.name }}</td>
+                    <td>{{ affectation.startDate | date:'medium' }}</td>
+                    <td>{{ affectation.endDate | date:'medium' }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <div *jhiHasAnyAuthority="['ROLE_LEVEL_1','ROLE_ADMIN']">
+                                <button *ngIf="affectation.event?.status !=='InProgress'"  (click)="validateAffectation(affectation?.id!)"
+                                class="btn btn-success btn-sm">
+                                <fa-icon icon="tasks"></fa-icon>
+                                <span class="d-none d-md-inline">Validate</span>
+                            </button>
+
+                            </div>
+                            
+                            <button type="submit"
+                                    [routerLink]="['/affectation', affectation.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/affectation', affectation.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline">Edit</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

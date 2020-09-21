@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared/util/request-util';
 import { IEvent } from 'app/shared/model/event.model';
+import { IAffectation } from 'app/shared/model/affectation.model';
 
 type EntityResponseType = HttpResponse<IEvent>;
 type EntityArrayResponseType = HttpResponse<IEvent[]>;
@@ -31,10 +32,25 @@ export class EventService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+
   find(id: number): Observable<EntityResponseType> {
     return this.http
       .get<IEvent>(`${this.resourceUrl}/${id}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  getEventAffectations(id: number):Observable<EntityArrayResponseType>{
+    return this.http.get<IAffectation[]>(`${this.resourceUrl}/${id}/affectations`,{observe:'response'})
+    .pipe(map((res : EntityArrayResponseType)=> this.convertDateArrayFromServer(res)));
+  }
+
+  validateEvent(id: number):Observable<EntityResponseType>{
+    return this.http
+    .post<IEvent>(`${this.resourceUrl}/${id}/validate`,id,{observe:'response'});
+  }
+
+  abandonEvent(id:number):Observable<EntityResponseType>{
+    return this.http.post<IEvent>(`${this.resourceUrl}/${id}/abandon`,id,{observe:'response'});
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

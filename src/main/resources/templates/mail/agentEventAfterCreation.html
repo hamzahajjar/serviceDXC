@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+<head>
+    <title th:text="#{agent.event.title}">JHipster creation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body>
+<p th:text="#{agent.event.greetings(${user.login})}">
+    Dear
+</p>
+<p th:text="#{agent.event.text1(${event.getClaimer().getLogin()})}">
+    Your JHipster account has been created, please click on the URL below to access it:
+</p>
+<p>
+    <a th:with="url=(@{|${baseUrl}/event/${event.id}/edit|})" th:href="${url}"
+       th:text="${url}">Details Link</a>
+</p>
+<p>
+    <span th:text="#{agent.event.text2}">Regards, </span>
+    <br/>
+    <em th:text="#{agent.event.signature}">JHipster.</em>
+</p>
+</body>
+</html>

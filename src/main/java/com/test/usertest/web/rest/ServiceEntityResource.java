@@ -1,9 +1,8 @@
 package com.test.usertest.web.rest;
 
-import com.test.usertest.domain.CatalogService;
-import com.test.usertest.domain.ServiceEntity;
-import com.test.usertest.domain.Society;
+import com.test.usertest.domain.*;
 import com.test.usertest.repository.ServiceEntityRepository;
+import com.test.usertest.repository.ServiceOfferedRepository;
 import com.test.usertest.repository.UserRepository;
 import com.test.usertest.security.AuthoritiesConstants;
 import com.test.usertest.security.SecurityUtils;
@@ -41,11 +40,14 @@ public class ServiceEntityResource {
 
     private final ServiceEntityRepository serviceEntityRepository;
     private final UserRepository userRepository;
+    private final ServiceOfferedRepository serviceOfferedRepository;
 
 
     public ServiceEntityResource(ServiceEntityRepository serviceEntityRepository,UserRepository userRepository
+        ,ServiceOfferedRepository serviceOfferedRepository
     ) {
         this.serviceEntityRepository = serviceEntityRepository;
+        this.serviceOfferedRepository=serviceOfferedRepository;
         this.userRepository=userRepository;
     }
 
@@ -130,11 +132,11 @@ public class ServiceEntityResource {
         return ResponseUtil.wrapOrNotFound(serviceEntity);
     }
     @GetMapping("service-entities/{id}/society")
-    public ResponseEntity<Society> getServiceEntitySociety(@PathVariable Long id){
+    public Optional<Society> getServiceEntitySociety(@PathVariable Long id){
         log.debug("REST request to get Service Entity Society :{}",id);
         Optional<ServiceEntity> serviceEntity=serviceEntityRepository.findById(id);
         Optional<Society> serviceEntitySociety=Optional.ofNullable(serviceEntity.get().getSociety());
-        return ResponseUtil.wrapOrNotFound(serviceEntitySociety);
+        return serviceEntitySociety;
     }
 
     /**
@@ -146,6 +148,12 @@ public class ServiceEntityResource {
     @DeleteMapping("/service-entities/{id}")
     public ResponseEntity<Void> deleteServiceEntity(@PathVariable Long id) {
         log.debug("REST request to delete ServiceEntity : {}", id);
+
+        for (User user:serviceEntityRepository.findById(id).get().getUsers()
+             ) {
+            userRepository.delete(user);
+        }
+
 
         serviceEntityRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();

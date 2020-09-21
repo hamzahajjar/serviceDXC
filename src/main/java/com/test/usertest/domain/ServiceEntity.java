@@ -41,7 +41,7 @@ public class ServiceEntity implements Serializable {
     private Set<User> users;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<ServiceOffered> serviceOffereds;
 
 

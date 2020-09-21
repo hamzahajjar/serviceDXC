@@ -90,7 +90,7 @@
                 <div class="form-group">
                     <label class="form-control-label" for="field_society">Society</label>
                     <select  class="form-control" id="field_society" name="society"
-                        formControlName="society" (change)="onSocietySelected(editForm.get('society')!.value?.id)">
+                        formControlName="society" (change)="onSocietySelected(editForm.get('society')!.value)">
                         <option [ngValue]="null"></option>
                         <option *ngFor="let societyOption of societies ; trackBy: trackSocietyById"
                             [ngValue]="societyOption.id === editForm.get('society')!.value?.id ? editForm.get('society')!.value : societyOption">

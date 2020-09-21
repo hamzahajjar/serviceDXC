@@ -32,7 +32,7 @@ export class ServiceEntityComponent implements OnInit, OnDestroy {
         {
           this.serviceEntityService.getServiceEntitySociety(serviceEntity.id).pipe(
             map((resSociety:HttpResponse<ISociety>) =>{
-              (resSociety.body)? serviceEntity.society=resSociety.body : null;
+              (resSociety.body)? serviceEntity.society=resSociety.body : undefined;
             })
           ).subscribe();
         }

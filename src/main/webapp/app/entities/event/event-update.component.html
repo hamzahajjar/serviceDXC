@@ -10,7 +10,7 @@
                     <label for="id">ID</label>
                     <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
                 </div>
-                <div *ngIf="eventValues.claimer" class="form-group" [hidden]="!editForm.get('claimer')!.value.name">
+                <div *jhiHasAnyAuthority="['ROLE_AGENT','ROLE_ADMIN']" class="form-group" [hidden]="!editForm.get('claimer')!.value.name">
                     <label for="claimer">Claimer</label>
                     <input type="text" class="form-control" id="claimer" name="claimer" formControlName="claimer"
                         readonly />
@@ -40,6 +40,21 @@
                         <option *ngFor="let typeOption of eventTypes"
                             [ngValue]="typeOption === editForm.get('type')!.value ? editForm.get('type')!.value : typeOption">
                             {{ typeOption }}</option>
+                    </select>
+                    <div
+                        *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
+                        <small class="form-text text-danger" *ngIf="editForm.get('type')?.errors?.required">
+                            This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div *jhiHasAnyAuthority="['ROLE_AGENT','ROLE_ADMIN']" class="form-group">
+                    <label class="form-control-label" for="field_serviceOffered">service Offered</label>
+                    <select class="form-control" id="field_serviceOffered" name="serviceOffered" formControlName="serviceOffered">
+                        <option [ngValue]="null"></option>
+                        <option *ngFor="let serviceOfferedOption of serviceOffereds; trackBy: trackServiceOfferedById"
+                            [ngValue]="serviceOfferedOption.id === editForm.get('serviceOffered')!.value?.id ? editForm.get('serviceOffered')!.value : serviceOfferedOption">
+                            {{ serviceOfferedOption.name }}</option>
                     </select>
                     <div
                         *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
